@@ -1,0 +1,31 @@
+{
+	"places": [
+		{
+			"id": 1,
+			"name": "Raja Ampat",
+			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id diam vitae dolor rhoncus venenatis quis at enim. Suspendisse aliquet ligula et erat efficitur pretium. Sed tincidunt lorem vitae condimentum tincidunt. Fusce et convallis ipsum. Maecenas laoreet velit ligula, ac pharetra nisl blandit in. Fusce bibendum lectus vitae ipsum posuere facilisis. Pellentesque ipsum libero, pulvinar non tellus vel, vestibulum egestas orci. Nulla elementum tincidunt libero ut rhoncus. Nulla non facilisis sem, a vestibulum mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+			"rating": 4,
+			"img_url": [
+				"https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+			]
+		},
+		{
+			"id": 2,
+			"name": "Borobudur",
+			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id diam vitae dolor rhoncus venenatis quis at enim. Suspendisse aliquet ligula et erat efficitur pretium. Sed tincidunt lorem vitae condimentum tincidunt. Fusce et convallis ipsum. Maecenas laoreet velit ligula, ac pharetra nisl blandit in. Fusce bibendum lectus vitae ipsum posuere facilisis. Pellentesque ipsum libero, pulvinar non tellus vel, vestibulum egestas orci. Nulla elementum tincidunt libero ut rhoncus. Nulla non facilisis sem, a vestibulum mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+			"rating": 5,
+			"img_url": [
+				"https://images.unsplash.com/photo-1596402184320-417e7178b2cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+			]
+		},
+		{
+			"id": 3,
+			"name": "Pantai Kuta",
+			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id diam vitae dolor rhoncus venenatis quis at enim. Suspendisse aliquet ligula et erat efficitur pretium. Sed tincidunt lorem vitae condimentum tincidunt. Fusce et convallis ipsum. Maecenas laoreet velit ligula, ac pharetra nisl blandit in. Fusce bibendum lectus vitae ipsum posuere facilisis. Pellentesque ipsum libero, pulvinar non tellus vel, vestibulum egestas orci. Nulla elementum tincidunt libero ut rhoncus. Nulla non facilisis sem, a vestibulum mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+			"rating": 4,
+			"img_url": [
+				"https://images.unsplash.com/photo-1592237036346-a2854e60872d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80"
+			]
+		}
+	]
+}
