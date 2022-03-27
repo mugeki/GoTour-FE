@@ -14,16 +14,16 @@ export default function Navbar({ mode }) {
 			</div>
 			<nav className="my-4 md:ml-auto md:my-0 text-sm font-thin">
 				<Link href="/" passHref>
-					<a className="mx-4">Home</a>
+					<a className="mx-3">Home</a>
 				</Link>
 				<Link href="/" passHref>
-					<a className="mx-4">Explore</a>
+					<a className="mx-3">Explore</a>
 				</Link>
 				<Link href="/" passHref>
-					<a className="mx-4">Register</a>
+					<a className="mx-3">Register</a>
 				</Link>
 				<Link href="/" passHref>
-					<a className="mx-4">Login</a>
+					<a className="mx-3">Login</a>
 				</Link>
 			</nav>
 		</header>

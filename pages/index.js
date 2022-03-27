@@ -19,12 +19,12 @@ export default function Home() {
 				className="absolute top-0 -z-20 min-w-full min-h-screen bg-cover transition-all duration-300"
 				style={{ backgroundImage: `url(${data[focusedItem].img_url[0]})` }}
 			></div>
-			<main className="flex flex-col-reverse lg:flex-row justify-between items-center lg:py-28 px-10 lg:px-44 text-white">
+			<main className="flex flex-col-reverse lg:flex-row justify-between items-center self-center lg:py-28 px-10 lg:px-20 xl:px-36 text-white">
 				<div className="lg:w-3/4 md:mr-10 mt-6 lg:mt-0">
 					<h1 className="font-bold text-4xl md:text-6xl mb-3 w-fit">
 						{data[focusedItem].name}
 					</h1>
-					<p className="font-thin text-sm line-clamp-5">
+					<p className="font-thin text-sm line-clamp-2 sm:line-clamp-5">
 						{data[focusedItem].description}
 					</p>
 					<Link href="/" passHref>
