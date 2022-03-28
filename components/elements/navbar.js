@@ -19,10 +19,10 @@ export default function Navbar({ mode }) {
 				<Link href="/" passHref>
 					<a className="mx-3 hover:text-teal-200">Explore</a>
 				</Link>
-				<Link href="/" passHref>
+				<Link href="/register" passHref>
 					<a className="mx-3 hover:text-teal-200">Register</a>
 				</Link>
-				<Link href="/" passHref>
+				<Link href="/login" passHref>
 					<a className="mx-3 hover:text-teal-200">Login</a>
 				</Link>
 			</nav>
