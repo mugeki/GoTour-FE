@@ -1,28 +1,39 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Rating } from 'react-simple-star-rating';
+import AddToWishlistButton from './addToWishlistButton';
 
-export default function CardHome({ img, title, rating, focused = false }) {
+export default function CardHome({
+	id,
+	img_url,
+	name,
+	rating,
+	focused = false,
+}) {
 	return (
-		<div className="m-auto">
-			<h1 className={focused ? 'text-sm' : 'text-xs'}>{title}</h1>
-			<div>
-				<Rating
-					initialValue={rating}
-					size={focused ? 15 : 10}
-					readonly
-					className="star-rating"
-				/>
+		<Link href={`/places/${id}`} passHref>
+			<div className="m-auto">
+				<h1 className={(focused ? 'text-sm' : 'text-xs') + ' truncate'}>{name}</h1>
+				<div>
+					<Rating
+						initialValue={rating}
+						size={focused ? 15 : 10}
+						readonly
+						className="star-rating"
+					/>
+				</div>
+				<div>
+					<AddToWishlistButton className="absolute z-10 m-2" />
+					<Image
+						src={img_url}
+						width={focused ? 250 : 220}
+						height={focused ? 450 : 300}
+						objectFit="cover"
+						className="rounded absolute"
+						quality={100}
+					/>
+				</div>
 			</div>
-			<div>
-				<Image
-					src={img}
-					width={focused ? 250 : 220}
-					height={focused ? 450 : 350}
-					objectFit="cover"
-					className="rounded transition ease-in-out delay-150"
-					quality={100}
-				/>
-			</div>
-		</div>
+		</Link>
 	);
 }
