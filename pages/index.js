@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Pagination } from 'swiper';
+import { Autoplay, Pagination } from 'swiper';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CardHome from '../components/elements/cardHome';
@@ -20,8 +20,8 @@ export default function Home() {
 				style={{ backgroundImage: `url(${data[focusedItem].img_url[0]})` }}
 			></div>
 			<main className="flex flex-col-reverse lg:flex-row justify-between items-center self-center lg:py-28 px-10 lg:px-20 xl:px-36 text-white">
-				<div className="lg:w-3/4 md:mr-10 mt-6 lg:mt-0">
-					<h1 className="font-bold text-4xl md:text-6xl mb-3 w-fit">
+				<div className="w-full md:w-3/4 lg:w-2/4 md:mr-10 mt-6 lg:mt-0">
+					<h1 className="font-bold text-4xl md:text-6xl mb-3 truncate">
 						{data[focusedItem].name}
 					</h1>
 					<p className="font-thin text-sm line-clamp-2 sm:line-clamp-5">
@@ -39,16 +39,21 @@ export default function Home() {
 					slidesPerView={2}
 					spaceBetween={10}
 					grabCursor={true}
+					autoplay={{
+						delay: 5000,
+						disableOnInteraction: false,
+					}}
 					onSlideChange={(swiper) => setFocusedItem(swiper.activeIndex)}
-					modules={[Pagination]}
-					className="flex w-full sm:w-2/4"
+					modules={[Autoplay, Pagination]}
+					className="w-full sm:w-2/4"
 				>
 					{data.map((item, i) => (
 						<SwiperSlide key={i} className="self-center">
 							<CardHome
-								title={item.name}
+								id={item.id}
+								name={item.name}
 								rating={item.rating}
-								img={item.img_url[0]}
+								img_url={item.img_url[0]}
 								focused={i === focusedItem}
 							/>
 						</SwiperSlide>

@@ -3,6 +3,7 @@
 		{
 			"id": 1,
 			"name": "Raja Ampat",
+			"location": "West Papua, Indonesia",
 			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id diam vitae dolor rhoncus venenatis quis at enim. Suspendisse aliquet ligula et erat efficitur pretium. Sed tincidunt lorem vitae condimentum tincidunt. Fusce et convallis ipsum. Maecenas laoreet velit ligula, ac pharetra nisl blandit in. Fusce bibendum lectus vitae ipsum posuere facilisis. Pellentesque ipsum libero, pulvinar non tellus vel, vestibulum egestas orci. Nulla elementum tincidunt libero ut rhoncus. Nulla non facilisis sem, a vestibulum mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 			"rating": 4,
 			"img_url": [
@@ -12,15 +13,20 @@
 		{
 			"id": 2,
 			"name": "Borobudur",
+			"location": "West Papua, Indonesia",
 			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id diam vitae dolor rhoncus venenatis quis at enim. Suspendisse aliquet ligula et erat efficitur pretium. Sed tincidunt lorem vitae condimentum tincidunt. Fusce et convallis ipsum. Maecenas laoreet velit ligula, ac pharetra nisl blandit in. Fusce bibendum lectus vitae ipsum posuere facilisis. Pellentesque ipsum libero, pulvinar non tellus vel, vestibulum egestas orci. Nulla elementum tincidunt libero ut rhoncus. Nulla non facilisis sem, a vestibulum mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 			"rating": 5,
 			"img_url": [
-				"https://images.unsplash.com/photo-1596402184320-417e7178b2cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+				"https://images.unsplash.com/photo-1596402184320-417e7178b2cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+				"https://images.unsplash.com/photo-1631340729644-8b8aad1e9dba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+				"https://images.unsplash.com/photo-1556375413-f6cdc5e17398?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1182&q=80",
+				"https://images.unsplash.com/photo-1612127342760-222e72aca87b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80"
 			]
 		},
 		{
 			"id": 3,
 			"name": "Pantai Kuta",
+			"location": "Bali, Indonesia",
 			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id diam vitae dolor rhoncus venenatis quis at enim. Suspendisse aliquet ligula et erat efficitur pretium. Sed tincidunt lorem vitae condimentum tincidunt. Fusce et convallis ipsum. Maecenas laoreet velit ligula, ac pharetra nisl blandit in. Fusce bibendum lectus vitae ipsum posuere facilisis. Pellentesque ipsum libero, pulvinar non tellus vel, vestibulum egestas orci. Nulla elementum tincidunt libero ut rhoncus. Nulla non facilisis sem, a vestibulum mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 			"rating": 4,
 			"img_url": [
