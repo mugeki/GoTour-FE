@@ -4,6 +4,8 @@ import Link from 'next/link';
 export default function Navbar({ mode }) {
 	const textColor =
 		mode === 'light' ? 'text-gray-900' : mode === 'dark' ? 'text-white' : '';
+	const hoverColor =
+		mode === 'light' ? 'hover:text-teal-600' : mode === 'dark' ? 'hover:text-teal-200' : '';
 	return (
 		<header
 			className={'flex flex-col md:flex-row items-center p-3 px-10 ' + textColor}
@@ -14,16 +16,16 @@ export default function Navbar({ mode }) {
 			</div>
 			<nav className="my-4 md:ml-auto md:my-0 text-sm font-thin">
 				<Link href="/" passHref>
-					<a className="mx-3 hover:text-teal-200">Home</a>
+					<a className={'mx-3 ' + hoverColor}>Home</a>
 				</Link>
-				<Link href="/" passHref>
-					<a className="mx-3 hover:text-teal-200">Explore</a>
+				<Link href="/explore" passHref>
+					<a className={'mx-3 ' + hoverColor}>Explore</a>
 				</Link>
 				<Link href="/register" passHref>
-					<a className="mx-3 hover:text-teal-200">Register</a>
+					<a className={'mx-3 ' + hoverColor}>Register</a>
 				</Link>
 				<Link href="/login" passHref>
-					<a className="mx-3 hover:text-teal-200">Login</a>
+					<a className={'mx-3 ' + hoverColor}>Login</a>
 				</Link>
 			</nav>
 		</header>
