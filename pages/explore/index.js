@@ -5,11 +5,11 @@ import CardExplore from "../../components/elements/cardExplore";
 
 export default function Explore() {
     const dataOri = dataMock.places;
-    const data = [ ...dataOri, ...dataOri ] ;
+    const data = [ ...dataOri, ...dataOri ];
 
     return (
         <Layout>
-            <main className="px-10 py-4">
+            <main className="px-10 py-10">
                 <h1 className="font-bold text-2xl md:text-3xl mb-4">
                     Explore Places
                 </h1>

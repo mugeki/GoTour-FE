@@ -29,7 +29,7 @@ export default function CardExplore({
                     <AddToWishlistButton className="absolute z-10 m-2 right-0" />
                     <Image
                         src={img_url}
-                        width={260}
+                        width={245}
                         height={176}
                         objectFit='cover'
                         quality={100}
