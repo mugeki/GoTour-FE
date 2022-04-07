@@ -9,14 +9,12 @@ export default function SearchEngine() {
             </div>
             <p className='font-bold mb-4'>Sort By</p>
             <div>
-                <input type="radio" id="newest" name="sort" value="newest" className='accent-teal-200'
-                        checked/>
-                <label for="newest" className='ml-3'>Newest</label>
+                <input type="radio" id="newest" name="sort" value="newest" className='accent-teal-200'/>
+                <label htmlFor="newest" className='ml-3'>Newest</label>
             </div>
             <div>
-                <input type="radio" id="highest" name="sort" value="highest" className='accent-teal-200'
-                        checked/>
-                <label for="highest" className='ml-3'>Highest Rating</label>
+                <input type="radio" id="highest" name="sort" value="highest" className='accent-teal-200'/>
+                <label htmlFor="highest" className='ml-3'>Highest Rating</label>
             </div>
         </form>
     )

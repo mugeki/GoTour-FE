@@ -5,7 +5,7 @@ import AddToWishlistButton from './addToWishlistButton';
 
 export default function CardExplore({
 	id,
-	img_url,
+	img_urls,
 	name,
     location,
 	rating,
@@ -28,7 +28,7 @@ export default function CardExplore({
                 <div className='relative'>
                     <AddToWishlistButton className="absolute z-10 m-2 right-0" />
                     <Image
-                        src={img_url}
+                        src={img_urls}
                         width={245}
                         height={176}
                         objectFit='cover'

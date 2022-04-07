@@ -5,7 +5,7 @@ import AddToWishlistButton from './addToWishlistButton';
 
 export default function CardHome({
 	id,
-	img_url,
+	img_urls,
 	name,
 	rating,
 	focused = false,
@@ -25,7 +25,7 @@ export default function CardHome({
 				<div>
 					<AddToWishlistButton className="absolute z-10 m-2" />
 					<Image
-						src={img_url}
+						src={img_urls}
 						width={focused ? 250 : 220}
 						height={focused ? 450 : 300}
 						objectFit="cover"

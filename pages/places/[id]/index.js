@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -12,7 +13,16 @@ export default function Place() {
 	const router = useRouter();
 	useEffect(() => {
 		const { id } = router.query;
-		setData(dataMock.places.filter((place) => place.id == id)[0]);
+		// setData(dataMock.places.filter((place) => place.id == id)[0]);
+		axios.get(`http://127.0.0.1:8000/api/place`)
+			.then(response => {
+				const places = response.data.data;
+				setData(places.filter((place) => place.id == id)[0]);
+				console.log("Data:", response.data.data);
+			})
+			.catch(err => {
+				console.log(err, `${process.env.BE_API_URL}/place`);
+			})
 	}, [router]);
 	return (
 		<Layout navbarStyle="dark">
@@ -21,22 +31,22 @@ export default function Place() {
 					<div className="absolute top-0 -z-10 bg-black/70 min-w-full h-64 sm:h-[390px]"></div>
 					<div
 						className="absolute top-0 -z-20 min-w-full bg-cover h-64 sm:h-[390px]"
-						style={{ backgroundImage: `url(${data.img_url[0]})` }}
+						style={{ backgroundImage: `url(${data.img_urls[0]})` }}
 					></div>
 					<article className="grid md:grid-cols-2 px-8 py-5 md:px-20 md:py-12">
 						<div className="ml-auto">
 							<Image
-								src={data.img_url[focusedImage]}
+								src={data.img_urls[focusedImage]}
 								width={650}
 								height={410}
 								objectFit="cover"
 								className="rounded shadow"
 							/>
 							<div className="flex justify-between">
-								{data.img_url
+								{data.img_urls
 									.filter((_, i) => i !== focusedImage)
 									.map((img, j) => (
-										<div className="cursor-pointer" onClick={() => setFocusedImage(j)}>
+										<div key={j} className="cursor-pointer" onClick={() => setFocusedImage(j)}>
 											<Image
 												key={j}
 												src={img}
