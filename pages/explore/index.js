@@ -8,10 +8,9 @@ export default function Explore() {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-		axios.get(`http://127.0.0.1:8000/api/place`)
+		axios.get(`${process.env.BE_API_URL}/place`)
 			.then(response => {
 				setData(response.data.data);
-				console.log("Data:", response.data.data);
 			})
 			.catch(err => {
 				console.log(err);

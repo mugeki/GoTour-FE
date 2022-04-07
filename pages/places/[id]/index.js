@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
 import AddToWishlistButton from '../../../components/elements/addToWishlistButton';
 import Layout from '../../../components/layout';
-import dataMock from '../../../mockPlaces.json';
 
 export default function Place() {
 	const [data, setData] = useState();
@@ -13,15 +12,12 @@ export default function Place() {
 	const router = useRouter();
 	useEffect(() => {
 		const { id } = router.query;
-		// setData(dataMock.places.filter((place) => place.id == id)[0]);
-		axios.get(`http://127.0.0.1:8000/api/place`)
+		axios.get(`${process.env.BE_API_URL}/place/${id}`)
 			.then(response => {
-				const places = response.data.data;
-				setData(places.filter((place) => place.id == id)[0]);
-				console.log("Data:", response.data.data);
+				setData(response.data.data);
 			})
 			.catch(err => {
-				console.log(err, `${process.env.BE_API_URL}/place`);
+				console.log(err);
 			})
 	}, [router]);
 	return (
