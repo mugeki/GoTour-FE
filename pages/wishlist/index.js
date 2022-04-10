@@ -1,10 +1,24 @@
 import Layout from "../../components/layout";
 import dataMock from '../../mockPlaces.json';
 import CardExplore from "../../components/elements/cardExplore";
+import { generateAxiosConfig } from "../../utils/helper";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Wishlist() {
-    const dataOri = dataMock.places;
-    const data = [ ...dataOri, ...dataOri ];
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+		axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
+			.then(response => {
+				setData(response.data.data);
+			})
+			.catch(err => {
+				console.log(err);
+                // alert(err.response.data.meta.message);
+                alert(JSON.stringify(err.response.data));
+			})
+	}, []);
 
     return (
         <Layout>
@@ -14,7 +28,7 @@ export default function Wishlist() {
                 </h1>
                 <div className="flex flex-row flex-wrap">
                     {data.map((item, i) => (
-                        <div className="w-full sm:w-auto sm:mr-5 mb-10">
+                        <div key={i} className="w-full sm:w-auto sm:mr-5 mb-10">
                             <CardExplore
                                 id={item.id}
                                 name={item.name}
