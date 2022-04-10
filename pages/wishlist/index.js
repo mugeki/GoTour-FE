@@ -20,7 +20,7 @@ export default function Wishlist() {
                                 name={item.name}
                                 location={item.location}
                                 rating={item.rating}
-                                img_url={item.img_url[0]}
+                                img_urls={item.img_urls[0]}
                             />
                         </div>
                     ))}

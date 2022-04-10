@@ -1,11 +1,21 @@
 import Layout from "../../components/layout";
-import dataMock from '../../mockPlaces.json';
 import SearchEngine from "../../components/elements/searchEngine";
 import CardExplore from "../../components/elements/cardExplore";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Explore() {
-    const dataOri = dataMock.places;
-    const data = [ ...dataOri, ...dataOri ];
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+		axios.get(`${process.env.BE_API_URL}/place`)
+			.then(response => {
+				setData(response.data.data);
+			})
+			.catch(err => {
+				console.log(err);
+			})
+	}, []);
 
     return (
         <Layout>
@@ -19,13 +29,13 @@ export default function Explore() {
                     </div>
                     <div className="lg:w-3/4 flex flex-row flex-wrap justify-center">
                         {data.map((item, i) => (
-                            <div className="w-full sm:w-auto sm:mx-5 mb-10">
-                                <CardExplore
-                                    id={item.id}
+                            <div key={i} className="w-full sm:w-auto sm:mx-5 mb-10">
+                                <CardExplore                                    
+                                    id={item.id}                                    
                                     name={item.name}
                                     location={item.location}
                                     rating={item.rating}
-                                    img_url={item.img_url[0]}
+                                    img_urls={item.img_urls[0]}
                                 />
                             </div>
                         ))}
