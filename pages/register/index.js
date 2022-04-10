@@ -1,12 +1,46 @@
 import { Icon } from '@iconify/react';
 import { Formik } from 'formik';
 import Link from 'next/link';
+import Head from 'next/head';
+import axios from 'axios';
+import { useRouter } from "next/router";
+import Cookies from 'universal-cookie';
+
 
 export default function Register() {
 	const img =
 		'https://images.unsplash.com/photo-1593537898540-b8b821014c8e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80';
+
+	const router = useRouter();
+
+	const register = (name, email, password) => {
+		const cookies = new Cookies();
+		
+		axios.post(`${process.env.BE_API_URL}/register`, {
+			name,
+			email,
+			password
+		})
+		.then(resp => {
+			cookies.set("token", resp.data.data.access_token, { path: "/", domain: window.location.hostname });
+			router.push("/");
+		})
+		.catch(err => {
+			console.log(err);
+			alert(err.response.data.meta.message[0]);
+		})
+	}
+
 	return (
 		<div className="grid grid-cols-3">
+			<Head>
+				<title>Register | GoTour</title>
+				<meta
+					name="description"
+					content="Find the perfect destination for your trip"
+				/>
+				<link rel="icon" href="/" />
+			</Head>
 			<div>
 				<div
 					className="flex items-center justify-center h-screen w-full"
@@ -26,7 +60,7 @@ export default function Register() {
 			<div className="text-center m-auto col-span-2 w-1/2">
 				<h1 className="font-bold text-4xl mb-10">Register</h1>
 				<Formik
-					initialValues={{ email: '', password: '' }}
+					initialValues={{ name: '', email: '', password: '' }}
 					validate={(values) => {
 						const errors = {};
 						if (!values.email) {
@@ -39,10 +73,9 @@ export default function Register() {
 						return errors;
 					}}
 					onSubmit={(values, { setSubmitting }) => {
-						setTimeout(() => {
-							alert(JSON.stringify(values, null, 2));
-							setSubmitting(false);
-						}, 400);
+						register(values.name, values.email, values.password);
+						// alert(JSON.stringify(values, null, 2));
+						setSubmitting(false);
 					}}
 				>
 					{({
@@ -55,6 +88,23 @@ export default function Register() {
 						isSubmitting,
 					}) => (
 						<form onSubmit={handleSubmit} className="flex flex-col">
+							<div className="mb-4">
+								<input
+									className={
+										'bg-white border-2 border-gray-400 w-full px-5 py-2 rounded focus:outline-teal-600 ' +
+										(errors.name && 'border-red-500')
+									}
+									type="name"
+									name="name"
+									placeholder="Name"
+									onChange={handleChange}
+									onBlur={handleBlur}
+									value={values.name}
+								/>
+								<p className="text-left ml-1 mt-1 text-red-500 text-xs">
+									{errors.name && touched.name && errors.name}
+								</p>
+							</div>
 							<div className="mb-4">
 								<input
 									className={
