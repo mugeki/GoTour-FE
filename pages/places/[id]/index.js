@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
 import AddToWishlistButton from '../../../components/elements/addToWishlistButton';
 import Layout from '../../../components/layout';
+import { generateAxiosConfig, isLoggedIn } from "../../../utils/helper";
 
 export default function Place() {
 	const [data, setData] = useState();
@@ -13,8 +14,25 @@ export default function Place() {
 	useEffect(() => {
 		const { id } = router.query;
 		axios.get(`${process.env.BE_API_URL}/place/${id}`)
-			.then(response => {
-				setData(response.data.data);
+			.then(res => {
+				const place = res.data.data;
+				if (isLoggedIn()) {
+					axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
+						.then(resWishlist => {
+							const wishlistedPlaces = resWishlist.data.data;
+							const resWithWishlist = {
+								...place,
+								wishlist: wishlistedPlaces.some(e => e.id === place.id),
+							}
+							setData(resWithWishlist);
+						})
+						.catch(err => {
+							console.log(err);
+							// alert(JSON.stringify(err.res.data));
+						})
+				} else {
+					setData(place);
+				}
 			})
 			.catch(err => {
 				console.log(err);
@@ -58,7 +76,7 @@ export default function Place() {
 
 						<div className="text-gray-900 md:text-white md:ml-10 md:mt-20">
 							<div className="flex items-cetner mb-2">
-								<AddToWishlistButton />
+								<AddToWishlistButton isActive={data.wishlist} id={data.id} />
 								<Rating
 									initialValue={data.rating}
 									size={15}

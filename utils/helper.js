@@ -1,3 +1,4 @@
+import axios from "axios";
 import Router from "next/router";
 import Cookies from "universal-cookie";
 
@@ -29,4 +30,9 @@ function generateAxiosConfig() {
 	return config;
 }
 
-export { handleUnauthorized, redirect, generateAxiosConfig };
+function isLoggedIn() {
+	const cookies = new Cookies();
+	cookies.get("token") !== undefined
+}
+
+export { handleUnauthorized, redirect, generateAxiosConfig, isLoggedIn };

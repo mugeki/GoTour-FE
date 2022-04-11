@@ -3,14 +3,34 @@ import SearchEngine from "../../components/elements/searchEngine";
 import CardExplore from "../../components/elements/cardExplore";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { generateAxiosConfig, isLoggedIn } from "../../utils/helper";
 
 export default function Explore() {
     const [data, setData] = useState([]);
 
     useEffect(() => {
 		axios.get(`${process.env.BE_API_URL}/place`)
-			.then(response => {
-				setData(response.data.data);
+			.then(res => {
+                if (isLoggedIn()) {
+                    axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
+                        .then(resWishlist => {
+                            const wishlistedPlaces = resWishlist.data.data;
+                            const resWithWishlist = res.data.data.map((place) => {
+                                return {
+                                    ...place,
+                                    wishlist: wishlistedPlaces.some(e => e.id === place.id),
+                                }
+                            })
+                            console.log(resWithWishlist)
+                            setData(resWithWishlist);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            alert(JSON.stringify(err.res.data));
+                        })
+				} else {
+					setData(res.data.data);
+				}
 			})
 			.catch(err => {
 				console.log(err);
@@ -19,9 +39,27 @@ export default function Explore() {
 
     const handleSearchSubmit = (keyword, sortBy, page=null) => {
         axios.get(`${process.env.BE_API_URL}/place?page=${page}&keyword=${keyword}&sort_by=${sortBy}`)
-			.then(response => {
-				setData(response.data.data);
-                console.log("good", response);
+			.then(res => {
+                if (isLoggedIn()) {
+                    axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
+                        .then(resWishlist => {
+                            const wishlistedPlaces = resWishlist.data.data;
+                            const resWithWishlist = res.data.data.map((place) => {
+                                return {
+                                    ...place,
+                                    wishlist: wishlistedPlaces.some(e => e.id === place.id),
+                                }
+                            })
+                            console.log(resWithWishlist)
+                            setData(resWithWishlist);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            alert(JSON.stringify(err.res.data));
+                        })
+				} else {
+					setData(res.data.data);
+				}
 			})
 			.catch(err => {
 				console.log("err", err);
@@ -47,6 +85,7 @@ export default function Explore() {
                                     location={item.location}
                                     rating={item.rating}
                                     img_urls={item.img_urls[0]}
+                                    isWishlishted={item.wishlist}
                                 />
                             </div>
                         ))}

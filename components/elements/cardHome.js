@@ -9,6 +9,7 @@ export default function CardHome({
 	name,
 	rating,
 	focused = false,
+	isWishlishted,
 }) {
 	return (
 		<Link href={`/places/${id}`} passHref>
@@ -23,7 +24,7 @@ export default function CardHome({
 					/>
 				</div>
 				<div>
-					<AddToWishlistButton className="absolute z-10 m-2" />
+					<AddToWishlistButton isActive={isWishlishted} id={id} className="absolute z-10 m-2" />
 					<Image
 						src={img_urls}
 						width={focused ? 250 : 220}

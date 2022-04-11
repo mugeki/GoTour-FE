@@ -1,7 +1,7 @@
 import Layout from "../../components/layout";
 import dataMock from '../../mockPlaces.json';
 import CardExplore from "../../components/elements/cardExplore";
-import { generateAxiosConfig } from "../../utils/helper";
+import { generateAxiosConfig, isLoggedIn } from "../../utils/helper";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -10,13 +10,31 @@ export default function MyPlaces() {
 
     useEffect(() => {
 		axios.get(`${process.env.BE_API_URL}/my-places`, generateAxiosConfig())
-			.then(response => {
-				setData(response.data);
+			.then(res => {
+                if (isLoggedIn()) {
+                    axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
+                        .then(resWishlist => {
+                            const wishlistedPlaces = resWishlist.data.data;
+                            const resWithWishlist = res.data.map((place) => {
+                                return {
+                                    ...place,
+                                    wishlist: wishlistedPlaces.some(e => e.id === place.id),
+                                }
+                            })
+                            setData(resWithWishlist);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            alert(JSON.stringify(err.res.data));
+                        })
+				} else {
+					setData(res.data);
+				}
 			})
 			.catch(err => {
 				console.log(err);
-                // alert(err.response.data.meta.message);
-                alert(JSON.stringify(err.response.data));
+                // alert(err.res.data.meta.message);
+                alert(JSON.stringify(err.res.data));
 			})
 	}, []);
 
@@ -35,6 +53,7 @@ export default function MyPlaces() {
                                 location={item.location}
                                 rating={item.rating}
                                 img_urls={item.img_urls[0]}
+                                isWishlishted={item.wishlist}
                             />
                         </div>
                     ))}

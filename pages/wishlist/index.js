@@ -1,7 +1,7 @@
 import Layout from "../../components/layout";
 import dataMock from '../../mockPlaces.json';
 import CardExplore from "../../components/elements/cardExplore";
-import { generateAxiosConfig } from "../../utils/helper";
+import { generateAxiosConfig, isLoggedIn } from "../../utils/helper";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -10,13 +10,13 @@ export default function Wishlist() {
 
     useEffect(() => {
 		axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
-			.then(response => {
-				setData(response.data.data);
+			.then(res => {
+				setData(res.data.data);
 			})
 			.catch(err => {
 				console.log(err);
-                // alert(err.response.data.meta.message);
-                alert(JSON.stringify(err.response.data));
+                // alert(err.res.data.meta.message);
+                alert(JSON.stringify(err.res.data));
 			})
 	}, []);
 
@@ -35,6 +35,7 @@ export default function Wishlist() {
                                 location={item.location}
                                 rating={item.rating}
                                 img_urls={item.img_urls[0]}
+                                isWishlishted={true}
                             />
                         </div>
                     ))}
