@@ -13,7 +13,13 @@ export default function Layout({ children, navbarStyle = 'light' }) {
 				<link rel="icon" href="/" />
 			</Head>
 			<Navbar mode={navbarStyle} />
-			{children}
+			<div
+				className={
+					'min-h-screen ' + (navbarStyle === 'light' ? 'bg-[#FCFCFC]' : '')
+				}
+			>
+				{children}
+			</div>
 		</>
 	);
 }

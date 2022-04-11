@@ -1,21 +1,35 @@
 import { Icon } from '@iconify/react';
+import { Radio, RadioGroup, TextInput } from '@mantine/core';
 
 export default function SearchEngine() {
-    return (
-        <form action="" className="shadow-md p-5 text-sm">
-            <div className='relative mb-5'>
-                <Icon icon="ant-design:search-outlined" color="#888888" width={19} height={19} className='absolute top-3 left-3' />
-                <input type="text" name="place" id="" placeholder="Cari nama tempat" className="w-full border border-slate-400 rounded px-1 py-2 pl-10" />
-            </div>
-            <p className='font-bold mb-4'>Sort By</p>
-            <div>
-                <input type="radio" id="newest" name="sort" value="newest" className='accent-teal-200'/>
-                <label htmlFor="newest" className='ml-3'>Newest</label>
-            </div>
-            <div>
-                <input type="radio" id="highest" name="sort" value="highest" className='accent-teal-200'/>
-                <label htmlFor="highest" className='ml-3'>Highest Rating</label>
-            </div>
-        </form>
-    )
+	return (
+		<form className="shadow-md p-5 text-sm bg-white">
+			<div className="relative mb-5">
+				<TextInput
+					size="md"
+					classNames={{ input: 'border-2' }}
+					icon={
+						<Icon
+							icon="ant-design:search-outlined"
+							width={19}
+							height={19}
+							className="absolute top-3 left-3"
+						/>
+					}
+					type="text"
+					name="place"
+					placeholder="Cari nama tempat"
+				/>
+			</div>
+			<RadioGroup
+				label="Sort by"
+				size="md"
+				orientation="vertical"
+				defaultValue="newest"
+			>
+				<Radio value="newest" label="Newest" />
+				<Radio value="rating" label="Highest Rating" />
+			</RadioGroup>
+		</form>
+	);
 }
