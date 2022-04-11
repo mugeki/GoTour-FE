@@ -17,7 +17,7 @@ export default function Home() {
 	useEffect(() => {
 		axios.get(`${process.env.BE_API_URL}/place?sort_by=rating`)
 			.then(res => {
-				const highlightedPlaces = res.data.data.slice(0, 3);
+				const highlightedPlaces = res.data.data.data.slice(0, 3);
 
 				if (isLoggedIn()) {
 					axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())

@@ -17,7 +17,7 @@ export default function Explore() {
                     axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
                         .then(resWishlist => {
                             const wishlistedPlaces = resWishlist.data.data;
-                            const resWithWishlist = res.data.data.map((place) => {
+                            const resWithWishlist = res.data.data.data.map((place) => {
                                 return {
                                     ...place,
                                     wishlist: wishlistedPlaces.some(e => e.id === place.id),
@@ -39,16 +39,16 @@ export default function Explore() {
 			})
 	}, []);
 
-    const handleSearchSubmit = (keywordSubmit, sortBySubmit, pageSubmit=1) => {
+    const handleSearchSubmit = (keywordSubmit, sortBySubmit) => {
         setKeyword(keywordSubmit);
         setsortBy(sortBySubmit);
-        axios.get(`${process.env.BE_API_URL}/place?page=${page}&keyword=${keyword}&sort_by=${sortBy}`)
+        axios.get(`${process.env.BE_API_URL}/place?keyword=${keyword}&sort_by=${sortBy}`)
 			.then(res => {
                 if (isLoggedIn()) {
                     axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
                         .then(resWishlist => {
                             const wishlistedPlaces = resWishlist.data.data;
-                            const resWithWishlist = res.data.data.map((place) => {
+                            const resWithWishlist = res.data.data.data.map((place) => {
                                 return {
                                     ...place,
                                     wishlist: wishlistedPlaces.some(e => e.id === place.id),
@@ -78,7 +78,7 @@ export default function Explore() {
                     axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
                         .then(resWishlist => {
                             const wishlistedPlaces = resWishlist.data.data;
-                            const resWithWishlist = res.data.data.map((place) => {
+                            const resWithWishlist = res.data.data.data.map((place) => {
                                 return {
                                     ...place,
                                     wishlist: wishlistedPlaces.some(e => e.id === place.id),
