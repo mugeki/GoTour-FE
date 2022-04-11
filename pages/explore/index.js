@@ -17,6 +17,17 @@ export default function Explore() {
 			})
 	}, []);
 
+    const handleSearchSubmit = (keyword, sortBy, page=null) => {
+        axios.get(`${process.env.BE_API_URL}/place?page=${page}&keyword=${keyword}&sort_by=${sortBy}`)
+			.then(response => {
+				setData(response.data.data);
+                console.log("good", response);
+			})
+			.catch(err => {
+				console.log("err", err);
+			})
+    }
+
     return (
         <Layout>
             <main className="px-10 py-10">
@@ -25,7 +36,7 @@ export default function Explore() {
                 </h1>
                 <div className="flex flex-col lg:flex-row items-start">
                     <div className="w-full mb-10 lg:w-1/4">
-                        <SearchEngine />
+                        <SearchEngine handleSearchSubmit={handleSearchSubmit} />
                     </div>
                     <div className="lg:w-3/4 flex flex-row flex-wrap justify-center">
                         {data.map((item, i) => (
