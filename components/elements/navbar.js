@@ -17,7 +17,6 @@ export default function Navbar({ mode }) {
 
 	const handleLogOut = () => {
 		// TODO: axios
-		console.log("log out")
 		cookies.remove("token", { path: "/", domain: window.location.hostname });
 		router.push("/");
 	}

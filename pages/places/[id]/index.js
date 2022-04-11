@@ -9,12 +9,11 @@ import { generateAxiosConfig, isLoggedIn } from "../../../utils/helper";
 
 export default function Place() {
 	const [data, setData] = useState();
-	const [rating, setRating] = useState(0);
 	const [focusedImage, setFocusedImage] = useState(0);
 	const router = useRouter();
+	const { id } = router.query;
 
 	useEffect(() => {
-		const { id } = router.query;
 		axios.get(`${process.env.BE_API_URL}/place/${id}`)
 			.then(res => {
 				const place = res.data.data;
@@ -38,11 +37,30 @@ export default function Place() {
 			})
 			.catch(err => {
 				console.log(err);
+				// alert(JSON.stringify(err.res.data));
 			})
 	}, [router]);
 	
 	const handleRating = (rating) => {
-		setRating(rating);
+		axios({
+			method: "put",
+			url: `${process.env.BE_API_URL}/place/${id}/rate`,
+			headers: generateAxiosConfig().headers,
+			data: {
+				rating: rating/20,
+			}
+		})
+			.then(res => {
+				// console.log(rating);
+				// const newData = data;
+				// newData.rating = res.data.data.rating;
+				// console.log(newData)
+				// setData(newData);
+				router.reload(window.location.pathname)
+			})
+			.catch(err => {
+				console.log(err);
+			})
 	}
 
 	return (

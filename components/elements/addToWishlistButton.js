@@ -9,7 +9,6 @@ export default function AddToWishlistButton({ className, id, isActive }) {
 	const [active, setActive] = useState(isActive);
 
 	const handleWishlist = (id) => {
-		// if user is logged in
 		if (isLoggedIn()) {
 			axios({
 				method: active ? "delete" : "post",
@@ -19,16 +18,14 @@ export default function AddToWishlistButton({ className, id, isActive }) {
 				.then(resp => {
 					setActive(!active);
 					console.log(resp.data.meta.message);
-					alert(resp.data.meta.message);
 				})
 				.catch(err => {
 					console.log(err);
-					alert(JSON.stringify(err.res));
+					// alert(JSON.stringify(err.res));
 				})
 		} else {
 			router.push('/login');
 		}
-		// else
 	}
 
 	return (
