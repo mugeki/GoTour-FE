@@ -7,6 +7,8 @@ import { generateAxiosConfig, isLoggedIn } from "../../utils/helper";
 
 export default function Explore() {
     const [data, setData] = useState([]);
+    const [keyword, setKeyword] = useState("");
+    const [sortBy, setsortBy] = useState("");
 
     useEffect(() => {
 		axios.get(`${process.env.BE_API_URL}/place`)
@@ -37,7 +39,9 @@ export default function Explore() {
 			})
 	}, []);
 
-    const handleSearchSubmit = (keyword, sortBy, page=null) => {
+    const handleSearchSubmit = (keywordSubmit, sortBySubmit, pageSubmit=1) => {
+        setKeyword(keywordSubmit);
+        setsortBy(sortBySubmit);
         axios.get(`${process.env.BE_API_URL}/place?page=${page}&keyword=${keyword}&sort_by=${sortBy}`)
 			.then(res => {
                 if (isLoggedIn()) {
@@ -66,6 +70,41 @@ export default function Explore() {
 			})
     }
 
+    const handleLoadMore = () => {        ;
+        // console.log(`${process.env.BE_API_URL}/place?page=${page}&keyword=${keyword}&sort_by=${sortBy}`)
+        axios.get(`${process.env.BE_API_URL}/place?page=${data.length/9 + 1}&keyword=${keyword}&sort_by=${sortBy}`)
+			.then(res => {
+                if (isLoggedIn()) {
+                    axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
+                        .then(resWishlist => {
+                            const wishlistedPlaces = resWishlist.data.data;
+                            const resWithWishlist = res.data.data.map((place) => {
+                                return {
+                                    ...place,
+                                    wishlist: wishlistedPlaces.some(e => e.id === place.id),
+                                }
+                            })
+                            setData([
+                                ...data,
+                                ...resWithWishlist
+                            ]);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            alert(JSON.stringify(err.res.data));
+                        })
+				} else {
+					setData([
+                        ...data,
+                        ...res.data.data
+                    ]);
+				}
+			})
+			.catch(err => {
+				console.log("err", err);
+			})
+    }
+
     return (
         <Layout>
             <main className="px-10 py-10">
@@ -76,19 +115,24 @@ export default function Explore() {
                     <div className="w-full mb-10 lg:w-1/4">
                         <SearchEngine handleSearchSubmit={handleSearchSubmit} />
                     </div>
-                    <div className="lg:w-3/4 flex flex-row flex-wrap justify-center">
-                        {data.map((item, i) => (
-                            <div key={i} className="w-full sm:w-auto sm:mx-5 mb-10">
-                                <CardExplore                                    
-                                    id={item.id}                                    
-                                    name={item.name}
-                                    location={item.location}
-                                    rating={item.rating}
-                                    img_urls={item.img_urls[0]}
-                                    isWishlishted={item.wishlist}
-                                />
-                            </div>
-                        ))}
+                    <div className="lg:w-3/4 ">
+                        <div className="flex flex-row flex-wrap justify-center">
+                            {data.map((item, i) => (
+                                <div key={i} className="w-full sm:w-auto sm:mx-5 mb-10">
+                                    <CardExplore                                    
+                                        id={item.id}                                    
+                                        name={item.name}
+                                        location={item.location}
+                                        rating={item.rating}
+                                        img_urls={item.img_urls[0]}
+                                        isWishlishted={item.wishlist}
+                                    />
+                                </div>
+                            ))}                        
+                        </div>
+                        {data.length % 9 === 0 && (
+                            <button onClick={handleLoadMore} className="text-center m-auto block">Load more...</button>
+                        )}
                     </div>
                 </div>
             </main>
