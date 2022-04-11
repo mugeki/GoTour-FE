@@ -3,6 +3,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Cookies from 'universal-cookie';
+import { generateAxiosConfig, isLoggedIn } from '../../utils/helper';
 
 export default function Navbar({ mode }) {
 	const cookies = new Cookies();
@@ -13,12 +14,15 @@ export default function Navbar({ mode }) {
 	const hoverColor =
 		mode === 'light' ? 'hover:text-teal-600' : mode === 'dark' ? 'hover:text-teal-200' : '';
 
-	const isLoggedIn = cookies.get("token") !== undefined;
-
 	const handleLogOut = () => {
-		// TODO: axios
-		cookies.remove("token", { path: "/", domain: window.location.hostname });
-		router.push("/");
+		axios.post(`${process.env.BE_API_URL}/logout`, {}, generateAxiosConfig())
+			.then(res => {
+				cookies.remove("token", { path: "/", domain: window.location.hostname });
+				router.push("/");
+			})
+			.catch(err => {
+				console.log(err)
+			})
 	}
 	
 	return (
@@ -36,7 +40,7 @@ export default function Navbar({ mode }) {
 				<Link href="/explore" passHref>
 					<a className={'mx-3 ' + hoverColor}>Explore</a>
 				</Link>
-				{isLoggedIn ? 
+				{isLoggedIn() ? 
 					<>
 						<Link href="/wishlist" passHref>
 							<a className={'mx-3 ' + hoverColor}>Wishlist</a>
