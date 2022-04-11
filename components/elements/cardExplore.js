@@ -9,6 +9,7 @@ export default function CardExplore({
 	name,
     location,
 	rating,
+    isWishlishted,
 }) {
     return (
         <Link href={`/places/${id}`} passHref>
@@ -26,7 +27,7 @@ export default function CardExplore({
                     </div>
                 </div>
                 <div className='relative'>
-                    <AddToWishlistButton className="absolute z-10 m-2 right-0" />
+                <AddToWishlistButton isActive={isWishlishted} id={id} className="absolute z-10 m-2 right-0" />
                     <Image
                         src={img_urls}
                         width={245}

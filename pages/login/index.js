@@ -1,12 +1,44 @@
 import { Icon } from '@iconify/react';
 import { Formik } from 'formik';
 import Link from 'next/link';
+import Head from 'next/head';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import Cookies from 'universal-cookie';
 
 export default function Login() {
+	const router = useRouter();
+
 	const img =
-		'https://images.unsplash.com/photo-1593537898540-b8b821014c8e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80';
+		'https://images.unsplash.com/photo-1593537898540-b8b821014c8e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80';	
+
+	const login = (email, password) => {
+		const cookies = new Cookies();
+		
+		axios.post(`${process.env.BE_API_URL}/login`, {
+			email,
+			password
+		})
+		.then(resp => {
+			cookies.set("token", resp.data.data.access_token, { path: "/", domain: window.location.hostname });
+			router.push("/");
+		})
+		.catch(err => {
+			console.log(err);
+			alert(err.res.data.meta.message);
+		})
+	}
+
 	return (
 		<div className="flex flex-col md:grid md:grid-cols-3">
+			<Head>
+				<title>Login | GoTour</title>
+				<meta
+					name="description"
+					content="Find the perfect destination for your trip"
+				/>
+				<link rel="icon" href="/" />
+			</Head>
 			<div>
 				<div
 					className="flex items-center justify-center h-[150px] md:h-screen w-full"
@@ -39,10 +71,9 @@ export default function Login() {
 						return errors;
 					}}
 					onSubmit={(values, { setSubmitting }) => {
-						setTimeout(() => {
-							alert(JSON.stringify(values, null, 2));
-							setSubmitting(false);
-						}, 400);
+						login(values.email, values.password);
+						// alert(JSON.stringify(values, null, 2));
+						setSubmitting(false);
 					}}
 				>
 					{({

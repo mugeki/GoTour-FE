@@ -8,6 +8,7 @@ import CardHome from '../components/elements/cardHome';
 import Layout from '../components/layout';
 import axios from 'axios';
 import { useEffect } from 'react';
+import { generateAxiosConfig, isLoggedIn } from "../utils/helper";
 
 export default function Home() {
 	const [focusedItem, setFocusedItem] = useState(0);
@@ -15,9 +16,29 @@ export default function Home() {
 
 	useEffect(() => {
 		axios.get(`${process.env.BE_API_URL}/place?sort_by=rating`)
-			.then(response => {
-				const places = response.data.data;
-				setData(places.slice(0, 3));
+			.then(res => {
+				const highlightedPlaces = res.data.data.data.slice(0, 3);
+
+				if (isLoggedIn()) {
+					axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
+						.then(resWishlist => {
+							const wishlistedPlaces = resWishlist.data.data;
+							const resWithWishlist = highlightedPlaces.map((place) => {
+								return {
+									...place,
+									wishlist: wishlistedPlaces.some(e => e.id === place.id),
+								}
+							})
+							setData(resWithWishlist);
+						})
+						.catch(err => {
+							console.log(err);
+							// alert(JSON.stringify(err.res.data));
+						})
+				} else {
+					setData(highlightedPlaces);
+				}
+
 			})
 			.catch(err => {
 				console.log(err);
@@ -70,6 +91,7 @@ export default function Home() {
 											rating={item.rating}
 											img_urls={item.img_urls[0]}
 											focused={i === focusedItem}
+											isWishlishted={item.wishlist}
 										/>
 									</SwiperSlide>
 								))}

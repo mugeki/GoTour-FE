@@ -5,21 +5,64 @@ import { useEffect, useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
 import AddToWishlistButton from '../../../components/elements/addToWishlistButton';
 import Layout from '../../../components/layout';
+import { generateAxiosConfig, isLoggedIn } from "../../../utils/helper";
 
 export default function Place() {
 	const [data, setData] = useState();
 	const [focusedImage, setFocusedImage] = useState(0);
 	const router = useRouter();
+	const { id } = router.query;
+
 	useEffect(() => {
-		const { id } = router.query;
 		axios.get(`${process.env.BE_API_URL}/place/${id}`)
-			.then(response => {
-				setData(response.data.data);
+			.then(res => {
+				const place = res.data.data;
+				if (isLoggedIn()) {
+					axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
+						.then(resWishlist => {
+							const wishlistedPlaces = resWishlist.data.data;
+							const resWithWishlist = {
+								...place,
+								wishlist: wishlistedPlaces.some(e => e.id === place.id),
+							}
+							setData(resWithWishlist);
+						})
+						.catch(err => {
+							console.log(err);
+							// alert(JSON.stringify(err.res.data));
+						})
+				} else {
+					setData(place);
+				}
+			})
+			.catch(err => {
+				console.log(err);
+				// alert(JSON.stringify(err.res.data));
+			})
+	}, [router]);
+	
+	const handleRating = (rating) => {
+		axios({
+			method: "put",
+			url: `${process.env.BE_API_URL}/place/${id}/rate`,
+			headers: generateAxiosConfig().headers,
+			data: {
+				rating: rating/20,
+			}
+		})
+			.then(res => {
+				// console.log(rating);
+				// const newData = data;
+				// newData.rating = res.data.data.rating;
+				// console.log(newData)
+				// setData(newData);
+				router.reload(window.location.pathname)
 			})
 			.catch(err => {
 				console.log(err);
 			})
-	}, [router]);
+	}
+
 	return (
 		<Layout navbarStyle="dark">
 			{data && (
@@ -58,10 +101,12 @@ export default function Place() {
 
 						<div className="text-gray-900 md:text-white md:ml-10 md:mt-20">
 							<div className="flex items-cetner mb-2">
-								<AddToWishlistButton />
+								<AddToWishlistButton isActive={data.wishlist} id={data.id} />
 								<Rating
 									initialValue={data.rating}
 									size={15}
+									readonly={!isLoggedIn()}
+									onClick={handleRating}
 									className="star-rating ml-3 "
 								/>
 							</div>
