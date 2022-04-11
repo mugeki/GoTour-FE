@@ -9,8 +9,10 @@ import { generateAxiosConfig, isLoggedIn } from "../../../utils/helper";
 
 export default function Place() {
 	const [data, setData] = useState();
+	const [rating, setRating] = useState(0);
 	const [focusedImage, setFocusedImage] = useState(0);
 	const router = useRouter();
+
 	useEffect(() => {
 		const { id } = router.query;
 		axios.get(`${process.env.BE_API_URL}/place/${id}`)
@@ -38,6 +40,11 @@ export default function Place() {
 				console.log(err);
 			})
 	}, [router]);
+	
+	const handleRating = (rating) => {
+		setRating(rating);
+	}
+
 	return (
 		<Layout navbarStyle="dark">
 			{data && (
@@ -80,6 +87,8 @@ export default function Place() {
 								<Rating
 									initialValue={data.rating}
 									size={15}
+									readonly={!isLoggedIn()}
+									onClick={handleRating}
 									className="star-rating ml-3 "
 								/>
 							</div>

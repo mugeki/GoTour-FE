@@ -32,7 +32,7 @@ function generateAxiosConfig() {
 
 function isLoggedIn() {
 	const cookies = new Cookies();
-	cookies.get("token") !== undefined
+	return cookies.get("token") !== undefined;
 }
 
 export { handleUnauthorized, redirect, generateAxiosConfig, isLoggedIn };
