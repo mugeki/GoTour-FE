@@ -1,15 +1,8 @@
 import { Button, Modal, Text } from '@mantine/core';
 import { useState } from 'react';
 
-export default function ModalConfirmation({ opened, setOpened, data }) {
+export default function ModalConfirmation({ opened, setOpened, data, handleDelete }) {
 	const [fetchError, setFetchError] = useState('');
-	const handleYes = () => {
-		axios
-			.delete(`${process.env.BE_API_URL}/places/${data.id}`)
-			.then((res) => {})
-			.catch((err) => {})
-			.finally(() => {});
-	};
 
 	return (
 		<Modal
@@ -31,7 +24,10 @@ export default function ModalConfirmation({ opened, setOpened, data }) {
 				<Button className="mx-3" variant="outline" onClick={() => setOpened(false)}>
 					No
 				</Button>
-				<Button variant="filled">Yes</Button>
+				<Button onClick={() => {
+					handleDelete(data.id)
+					setOpened(false)	
+				}} variant="filled">Yes</Button>
 			</div>
 		</Modal>
 	);

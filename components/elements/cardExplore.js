@@ -16,6 +16,7 @@ export default function CardExplore({
 	rating,
 	openEdit,
 	isWishlishted,
+	handleDelete,
 }) {
 	const router = useRouter();
 	const editable = router.pathname.includes('/my-places');
@@ -26,6 +27,7 @@ export default function CardExplore({
 				opened={isOpen}
 				setOpened={setIsOpen}
 				data={{ id, name }}
+				handleDelete={handleDelete}
 			/>
 			<div className="rounded shadow-md bg-white">
 				<div className="px-4 py-3">

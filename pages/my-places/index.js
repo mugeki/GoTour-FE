@@ -42,6 +42,20 @@ export default function MyPlaces() {
 			})
 	}, []);
 
+	const handleDelete = (id) => {
+		axios
+			.delete(`${process.env.BE_API_URL}/place/${id}`, generateAxiosConfig())
+			.then((res) => {
+				const newData = data.filter((place) => {
+					return place.id != id;
+				})
+				setData(newData);
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+
 	return (
 		<Layout>
 			<ModalPlace
@@ -76,6 +90,7 @@ export default function MyPlaces() {
 								rating={item.rating}
 								img_urls={item.img_urls[0]}
 								isWishlishted={item.wishlist}
+								handleDelete={handleDelete}
 								openEdit={() => {
 									setIsEdit(true);
 									setEditData({ ...item });

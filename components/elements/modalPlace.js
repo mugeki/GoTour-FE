@@ -38,19 +38,19 @@ export default function ModalPlace({ title, opened, setOpened, isEdit, data }) {
 		}
 	};
 	const handleSubmit = (data, setSubmitting, setFetchError) => {
-		axios
-			.post(`${process.env.BE_API_URL}/register`, data)
-			.then((res) => {
-				const cookies = new Cookies();
-				cookies.set('token', res.data.data.access_token, { path: '/' });
-				router.push('/');
-			})
-			.catch((err) => {
-				setFetchError(err.response.data.meta.message[0]);
-			})
-			.finally(() => {
-				setSubmitting(false);
-			});
+		// axios
+		// 	.post(`${process.env.BE_API_URL}/register`, data)
+		// 	.then((res) => {
+		// 		const cookies = new Cookies();
+		// 		cookies.set('token', res.data.data.access_token, { path: '/' });
+		// 		router.push('/');
+		// 	})
+		// 	.catch((err) => {
+		// 		setFetchError(err.response.data.meta.message[0]);
+		// 	})
+		// 	.finally(() => {
+		// 		setSubmitting(false);
+		// 	});
 	};
 	useEffect(() => {
 		return () => {
