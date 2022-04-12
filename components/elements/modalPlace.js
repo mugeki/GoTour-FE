@@ -8,49 +8,80 @@ import {
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from '../../thirdparties/firebase/firebase';
-import { validateForm } from '../../utils/helper';
+import { generateAxiosConfig, validateForm } from '../../utils/helper';
 import ImageDropzone from './imageDropzone';
+import axios from 'axios';
 
-export default function ModalPlace({ title, opened, setOpened, isEdit, data }) {
+export default function ModalPlace({ title, opened, setOpened, isEdit, data, placeData, setData }) {
 	const [files, setFiles] = useState([]);
+	const [loadingUpload, setLoadingUpload] = useState(false);
 	const [fetchError, setFetchError] = useState('');
-	const uploadImage = (files) => {
-		if (app) {
-			// loop through files array
-			for (let i = 0; i < files.length; i++) {}
+	// const uploadImage = (files) => {
+	// 	let imgUrls = []
 
-			const file = e.target.files[0];
-			const storageRef = getStorage();
-			const fileRef = ref(storageRef, file.name);
-			setLoadingUpload(true);
-			imageCompression(file, compressionOption).then((compressedFile) => {
-				uploadBytes(fileRef, compressedFile).then(() => {
-					getDownloadURL(fileRef)
-						.then((url) => {
-							setForm({ ...form, img_link: url });
-						})
-						.then(() => {
-							setLoadingUpload(false);
-						});
-				});
-			});
-		}
-	};
+	// 	const storage = getStorage();
+	// 	setLoadingUpload(true);
+
+	// 	files.forEach((file, i) => {
+	// 		console.log(file);
+	// 		const storageRef = ref(storage, file.name);
+	// 		uploadBytes(storageRef, file).then(() => {
+	// 			getDownloadURL(storageRef)
+	// 				.then((url) => {
+	// 					imgUrls.push(url)
+	// 				})
+	// 				.then(() => {
+	// 					setLoadingUpload(false);
+	// 				});
+	// 		});
+	// 	})
+
+	// 	return imgUrls;
+	// };
 	const handleSubmit = (data, setSubmitting, setFetchError) => {
-		// axios
-		// 	.post(`${process.env.BE_API_URL}/register`, data)
-		// 	.then((res) => {
-		// 		const cookies = new Cookies();
-		// 		cookies.set('token', res.data.data.access_token, { path: '/' });
-		// 		router.push('/');
-		// 	})
-		// 	.catch((err) => {
-		// 		setFetchError(err.response.data.meta.message[0]);
-		// 	})
-		// 	.finally(() => {
-		// 		setSubmitting(false);
-		// 	});
+		let imgUrls = []
+
+		setLoadingUpload(true);
+		
+		Promise.all(files.map((file) => {
+			const storage = getStorage();
+			const storageRef = ref(storage, file.name);
+			return uploadBytes(storageRef, file)
+				.then(() => {
+					return getDownloadURL(storageRef)
+				})
+				.then((url) => {
+					imgUrls.push(url);
+					console.log("url", url);
+				})
+		}))
+			.then((res) => {
+				data = { ...data, img_urls: imgUrls }
+				console.log("data", data);
+				console.log("res", res);
+			})
+			.then(() => {
+				axios
+					.post(`${process.env.BE_API_URL}/place`, data, generateAxiosConfig())
+					.then((res) => {
+						placeData.push(res.data.data);
+						setData(placeData);
+						console.log("res", res)
+						console.log("newData", placeData)
+					})
+					.catch((err) => {
+						setFetchError(err.response.data.meta.message[0]);
+						console.log("err", JSON.stringify(err))
+					})
+					.finally(() => {
+						console.log("finally")
+						setSubmitting(false);
+						setOpened(false);
+					});
+			})
+		
 	};
 	useEffect(() => {
 		return () => {

@@ -64,6 +64,8 @@ export default function MyPlaces() {
 				title="Add Place"
 				isEdit={isEdit}
 				data={isEdit ? editData : {}}
+				placeData={data}
+				setData={setData}
 			/>
 			<main className="px-20 py-10">
 				<div className="flex items-center justify-between mb-8">
