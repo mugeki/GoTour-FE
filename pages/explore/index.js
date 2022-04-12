@@ -37,11 +37,11 @@ export default function Explore() {
 				console.log(err);
 			});
 	}, []);
-
+        
     const handleSearchSubmit = (keywordSubmit, sortBySubmit) => {
         setKeyword(keywordSubmit);
         setsortBy(sortBySubmit);
-        axios.get(`${process.env.BE_API_URL}/place?keyword=${keyword}&sort_by=${sortBy}`)
+        axios.get(`${process.env.BE_API_URL}/place?keyword=${keywordSubmit}&sort_by=${sortBySubmit}`)
 			.then(res => {
                 if (isLoggedIn()) {
                     axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
@@ -53,7 +53,7 @@ export default function Explore() {
                                     wishlist: wishlistedPlaces.some(e => e.id === place.id),
                                 }
                             })
-                            console.log(resWithWishlist)
+                            console.log("56: resWithWishlist", resWithWishlist)
                             setData(resWithWishlist);
                         })
                         .catch(err => {
