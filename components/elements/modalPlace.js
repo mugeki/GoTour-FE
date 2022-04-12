@@ -7,44 +7,24 @@ import {
 } from '@mantine/core';
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
-import Cookies from 'universal-cookie';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from '../../thirdparties/firebase/firebase';
 import { generateAxiosConfig, validateForm } from '../../utils/helper';
 import ImageDropzone from './imageDropzone';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 export default function ModalPlace({ title, opened, setOpened, isEdit, data, placeData, setData }) {
 	const [files, setFiles] = useState([]);
 	const [loadingUpload, setLoadingUpload] = useState(false);
 	const [fetchError, setFetchError] = useState('');
-	// const uploadImage = (files) => {
-	// 	let imgUrls = []
+	const router = useRouter();
 
-	// 	const storage = getStorage();
-	// 	setLoadingUpload(true);
-
-	// 	files.forEach((file, i) => {
-	// 		console.log(file);
-	// 		const storageRef = ref(storage, file.name);
-	// 		uploadBytes(storageRef, file).then(() => {
-	// 			getDownloadURL(storageRef)
-	// 				.then((url) => {
-	// 					imgUrls.push(url)
-	// 				})
-	// 				.then(() => {
-	// 					setLoadingUpload(false);
-	// 				});
-	// 		});
-	// 	})
-
-	// 	return imgUrls;
-	// };
-	const handleSubmit = (data, setSubmitting, setFetchError) => {
+	const handleSubmit = (submittedValues, setSubmitting, setFetchError) => {
 		let imgUrls = []
 
 		setLoadingUpload(true);
-		
+		// Upload image, collect urls to imgUrls
 		Promise.all(files.map((file) => {
 			const storage = getStorage();
 			const storageRef = ref(storage, file.name);
@@ -54,29 +34,43 @@ export default function ModalPlace({ title, opened, setOpened, isEdit, data, pla
 				})
 				.then((url) => {
 					imgUrls.push(url);
-					console.log("url", url);
 				})
 		}))
-			.then((res) => {
-				data = { ...data, img_urls: imgUrls }
-				console.log("data", data);
-				console.log("res", res);
+			.then(() => {
+				submittedValues = { ...submittedValues, img_urls: imgUrls }
 			})
 			.then(() => {
-				axios
-					.post(`${process.env.BE_API_URL}/place`, data, generateAxiosConfig())
-					.then((res) => {
-						placeData.push(res.data.data);
-						setData(placeData);
-						console.log("res", res)
-						console.log("newData", placeData)
+				axios({
+					method: data ? "put" : "post",
+					url: data ? `${process.env.BE_API_URL}/place/${data.id}` : `${process.env.BE_API_URL}/place`,
+					headers: generateAxiosConfig().headers,
+					data: {
+						...submittedValues,
+					}
+				})
+					.then((res) => {						
+						if (data) {
+							const placeIndex = placeData.findIndex(place => place.id === data.id);
+							// TODO: pengecualian spread buat img_urls
+							placeData[placeIndex] = {
+								...data,
+								...res.data.data
+							}							
+							setData(placeData);
+						} else {
+							// placeData.push(res.data.data);
+							// setData(placeData);
+							// console.log("res", res)
+							// console.log("newData", placeData)
+							// Terpaksa reload gara2 response ga ada id, jadi kalo cardExplore dirender ga bisa masuk page dengan id yang sesuai dengan place
+							router.reload(window.location.pathname)
+						}
 					})
 					.catch((err) => {
 						setFetchError(err.response.data.meta.message[0]);
 						console.log("err", JSON.stringify(err))
 					})
 					.finally(() => {
-						console.log("finally")
 						setSubmitting(false);
 						setOpened(false);
 					});
