@@ -19,6 +19,7 @@ export default function ModalPlace({ title, opened, setOpened, isEdit, data, pla
 	const [loadingUpload, setLoadingUpload] = useState(false);
 	const [fetchError, setFetchError] = useState('');
 	const router = useRouter();
+	const dataIsEmpty = data  && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype;
 
 	const handleSubmit = (submittedValues, setSubmitting, setFetchError) => {
 		let imgUrls = []
@@ -41,15 +42,22 @@ export default function ModalPlace({ title, opened, setOpened, isEdit, data, pla
 			})
 			.then(() => {
 				axios({
-					method: data ? "put" : "post",
-					url: data ? `${process.env.BE_API_URL}/place/${data.id}` : `${process.env.BE_API_URL}/place`,
+					method: dataIsEmpty ? "post" : "put",
+					url: dataIsEmpty ? `${process.env.BE_API_URL}/place` : `${process.env.BE_API_URL}/place/${data.id}`,
 					headers: generateAxiosConfig().headers,
 					data: {
 						...submittedValues,
 					}
 				})
 					.then((res) => {						
-						if (data) {
+						if (dataIsEmpty) {
+							// placeData.push(res.data.data);
+							// setData(placeData);
+							// console.log("res", res)
+							// console.log("newData", placeData)
+							// Terpaksa reload gara2 response ga ada id, jadi kalo cardExplore dirender ga bisa masuk page dengan id yang sesuai dengan place
+							router.reload(window.location.pathname)
+						} else {
 							const placeIndex = placeData.findIndex(place => place.id === data.id);
 							// TODO: pengecualian spread buat img_urls
 							placeData[placeIndex] = {
@@ -57,17 +65,10 @@ export default function ModalPlace({ title, opened, setOpened, isEdit, data, pla
 								...res.data.data
 							}							
 							setData(placeData);
-						} else {
-							// placeData.push(res.data.data);
-							// setData(placeData);
-							// console.log("res", res)
-							// console.log("newData", placeData)
-							// Terpaksa reload gara2 response ga ada id, jadi kalo cardExplore dirender ga bisa masuk page dengan id yang sesuai dengan place
-							router.reload(window.location.pathname)
 						}
 					})
 					.catch((err) => {
-						setFetchError(err.response.data.meta.message[0]);
+						// setFetchError(err.response.data.meta.message[0]);
 						console.log("err", JSON.stringify(err))
 					})
 					.finally(() => {
@@ -98,9 +99,9 @@ export default function ModalPlace({ title, opened, setOpened, isEdit, data, pla
 		>
 			<Formik
 				initialValues={{
-					name: data ? data.name : '',
-					location: data ? data.location : '',
-					description: data ? data.description : '',
+					name: dataIsEmpty ? '' : data.name ,
+					location: dataIsEmpty ? '' : data.location ,
+					description: dataIsEmpty ? '' : data.description ,
 				}}
 				validate={(values) => {
 					return validateForm(values);
