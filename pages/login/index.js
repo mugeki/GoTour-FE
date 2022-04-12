@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { validateForm } from '../../utils/helper';
+import Head from 'next/head';
 
 export default function Login() {
 	const router = useRouter();

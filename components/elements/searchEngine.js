@@ -1,17 +1,20 @@
 import { Icon } from '@iconify/react';
 import { Formik } from 'formik';
 import { Radio, RadioGroup, TextInput } from '@mantine/core';
+import { useState } from 'react';
 
 export default function SearchEngine({ handleSearchSubmit }) {
+    const [radioValue, setRadioValue] = useState('newest');
     return (
         <Formik
-            initialValues={{ keyword: '', sort: '' }}
+            initialValues={{ keyword: '' }}
             validate={values => {
                 const errors = {};
                 return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
-                handleSearchSubmit(values.keyword, values.sort);
+                console.log({ ...values, radioValue })
+                handleSearchSubmit(values.keyword, radioValue);
                 setSubmitting(false);
             }}
         >
@@ -54,8 +57,8 @@ export default function SearchEngine({ handleSearchSubmit }) {
                         size="md"
                         orientation="vertical"
                         defaultValue="newest"
-                        onChange={handleChange}
-                        value={values.sort}
+                        onChange={setRadioValue}
+                        value={radioValue}
                     >
                         <Radio value="newest" label="Newest" />
                         <Radio value="rating" label="Highest Rating" />

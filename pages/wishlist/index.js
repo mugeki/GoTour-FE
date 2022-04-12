@@ -1,6 +1,5 @@
 import CardExplore from '../../components/elements/cardExplore';
 import Layout from '../../components/layout';
-import CardExplore from "../../components/elements/cardExplore";
 import { generateAxiosConfig } from "../../utils/helper";
 import { useState, useEffect } from "react";
 import axios from "axios";

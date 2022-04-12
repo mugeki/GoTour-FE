@@ -63,18 +63,15 @@ export default function Home() {
 									{data[focusedItem].description}
 								</p>
 								<Link href="/" passHref>
-									<a className="bg-teal-800 flex items-center justify-between py-2 px-4 mt-5 w-28 rounded shadow text-sm">
-										<Button
-											className="my-5"
-											type="submit"
-											size="lg"
-											variant="filled"
-											rightIcon={<Icon icon="eva:arrow-right-fill" />}
-										>
-											Explore
-										</Button>
-										<Icon icon="eva:arrow-right-fill" />
-									</a>
+									<Button
+										className="my-5"
+										type="submit"
+										size="lg"
+										variant="filled"
+										rightIcon={<Icon icon="eva:arrow-right-fill" />}
+									>
+										Explore
+									</Button>
 								</Link>
 							</div>
 							<Swiper

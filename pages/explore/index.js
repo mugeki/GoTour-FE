@@ -23,7 +23,6 @@ export default function Explore() {
                                     wishlist: wishlistedPlaces.some(e => e.id === place.id),
                                 }
                             })
-                            console.log(resWithWishlist)
                             setData(resWithWishlist);
                         })
                         .catch(err => {
@@ -31,7 +30,7 @@ export default function Explore() {
                             alert(JSON.stringify(err.res.data));
                         })
 				} else {
-					setData(res.data.data);
+					setData(res.data.data.data);
 				}
 			})
 			.catch((err) => {
@@ -62,7 +61,7 @@ export default function Explore() {
                             alert(JSON.stringify(err.res.data));
                         })
 				} else {
-					setData(res.data.data);
+					setData(res.data.data.data);
 				}
 			})
 			.catch(err => {
@@ -70,8 +69,7 @@ export default function Explore() {
 			})
     }
 
-    const handleLoadMore = () => {        ;
-        // console.log(`${process.env.BE_API_URL}/place?page=${page}&keyword=${keyword}&sort_by=${sortBy}`)
+    const handleLoadMore = () => {
         axios.get(`${process.env.BE_API_URL}/place?page=${data.length/9 + 1}&keyword=${keyword}&sort_by=${sortBy}`)
 			.then(res => {
                 if (isLoggedIn()) {
@@ -96,7 +94,7 @@ export default function Explore() {
 				} else {
 					setData([
                         ...data,
-                        ...res.data.data
+                        ...res.data.data.data
                     ]);
 				}
 			})
