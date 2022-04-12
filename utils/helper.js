@@ -1,8 +1,7 @@
-import axios from "axios";
-import Router from "next/router";
-import Cookies from "universal-cookie";
+import Router from 'next/router';
+import Cookies from 'universal-cookie';
 
-function redirect(ctx, location) {
+export function redirect(ctx, location) {
 	if (ctx.req) {
 		ctx.res.writeHead(302, { Location: location });
 		ctx.res.end();
@@ -11,28 +10,42 @@ function redirect(ctx, location) {
 	}
 }
 
-function handleUnauthorized(res) {
+export function handleUnauthorized(res) {
 	if ([401, 403].includes(res?.status)) {
 		const cookies = new Cookies();
-		cookies.remove("token", { path: "/", domain: window.location.hostname });
-		Router.push("/login");
+		cookies.remove('token', { path: '/', domain: window.location.hostname });
+		Router.push('/login');
 	}
 }
 
-function generateAxiosConfig() {
+export function generateAxiosConfig() {
 	const cookies = new Cookies();
-	const token = cookies.get("token");
+	const token = cookies.get('token');
 	const config = {
 		headers: {
-			Authorization: "Bearer " + token,
+			Authorization: 'Bearer ' + token,
 		},
 	};
 	return config;
 }
 
-function isLoggedIn() {
+export function isLoggedIn() {
 	const cookies = new Cookies();
-	return cookies.get("token") !== undefined;
+	return cookies.get('token') !== undefined;
 }
 
-export { handleUnauthorized, redirect, generateAxiosConfig, isLoggedIn };
+export function validateForm(form) {
+	const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+	const errors = {};
+
+	for (let key in form) {
+		if (key === 'email' && !regexEmail.test(form.email)) {
+			errors.email = 'Invalid email address';
+		}
+		if (!form[key]) {
+			errors[key] = 'This field is required';
+		}
+	}
+
+	return errors;
+}

@@ -11,8 +11,14 @@ export default function Navbar({ mode }) {
 
 	const textColor =
 		mode === 'light' ? 'text-gray-900' : mode === 'dark' ? 'text-white' : '';
+		
 	const hoverColor =
-		mode === 'light' ? 'hover:text-teal-600' : mode === 'dark' ? 'hover:text-teal-200' : '';
+		mode === 'light'
+			? 'hover:text-teal-600'
+			: mode === 'dark'
+			? 'hover:text-teal-500'
+			: '';
+	const shadow = mode === 'light' ? 'shadow' : '';
 
 	const handleLogOut = () => {
 		axios.post(`${process.env.BE_API_URL}/logout`, {}, generateAxiosConfig())
@@ -27,7 +33,12 @@ export default function Navbar({ mode }) {
 	
 	return (
 		<header
-			className={'flex flex-col md:flex-row items-center p-3 px-10 ' + textColor}
+			className={
+				'flex flex-col md:flex-row items-center p-3 px-10 ' +
+				textColor +
+				' ' +
+				shadow
+			}
 		>
 			<div className="flex items-center">
 				<Icon icon="ic:round-mode-of-travel" width={40} />

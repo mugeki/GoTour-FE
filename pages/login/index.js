@@ -1,33 +1,51 @@
 import { Icon } from '@iconify/react';
+import { Button, TextInput } from '@mantine/core';
+import axios from 'axios';
 import { Formik } from 'formik';
 import Link from 'next/link';
-import Head from 'next/head';
-import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import Cookies from 'universal-cookie';
+import { validateForm } from '../../utils/helper';
+import Head from 'next/head';
 
 export default function Login() {
 	const router = useRouter();
-
+	const [fetchError, setFetchError] = useState('');
+	const handleSubmit = (data, setSubmitting, setFetchError) => {
+		axios
+			.post(`${process.env.BE_API_URL}/login`, data)
+			.then((res) => {
+				const cookies = new Cookies();
+				cookies.set('token', res.data.data.access_token, { path: '/' });
+				router.push('/');
+			})
+			.catch((err) => {
+				setFetchError(err.response.data.meta.message);
+			})
+			.finally(() => {
+				setSubmitting(false);
+			});
+	};
 	const img =
 		'https://images.unsplash.com/photo-1593537898540-b8b821014c8e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80';	
 
-	const login = (email, password) => {
-		const cookies = new Cookies();
+	// const login = (email, password) => {
+	// 	const cookies = new Cookies();
 		
-		axios.post(`${process.env.BE_API_URL}/login`, {
-			email,
-			password
-		})
-		.then(resp => {
-			cookies.set("token", resp.data.data.access_token, { path: "/", domain: window.location.hostname });
-			router.push("/");
-		})
-		.catch(err => {
-			console.log(err);
-			alert(err.res.data.meta.message);
-		})
-	}
+	// 	axios.post(`${process.env.BE_API_URL}/login`, {
+	// 		email,
+	// 		password
+	// 	})
+	// 	.then(resp => {
+	// 		cookies.set("token", resp.data.data.access_token, { path: "/", domain: window.location.hostname });
+	// 		router.push("/");
+	// 	})
+	// 	.catch(err => {
+	// 		console.log(err);
+	// 		alert(err.res.data.meta.message);
+	// 	})
+	// }
 
 	return (
 		<div className="flex flex-col md:grid md:grid-cols-3">
@@ -60,20 +78,10 @@ export default function Login() {
 				<Formik
 					initialValues={{ email: '', password: '' }}
 					validate={(values) => {
-						const errors = {};
-						if (!values.email) {
-							errors.email = 'Required';
-						} else if (
-							!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-						) {
-							errors.email = 'Invalid email address';
-						}
-						return errors;
+						return validateForm(values);
 					}}
 					onSubmit={(values, { setSubmitting }) => {
-						login(values.email, values.password);
-						// alert(JSON.stringify(values, null, 2));
-						setSubmitting(false);
+						handleSubmit(values, setSubmitting, setFetchError);
 					}}
 				>
 					{({
@@ -85,49 +93,48 @@ export default function Login() {
 						handleSubmit,
 						isSubmitting,
 					}) => (
-						<form onSubmit={handleSubmit} className="flex flex-col">
+						<form onSubmit={handleSubmit} className="flex flex-col text-left">
 							<div className="mb-4">
-								<input
-									className={
-										'bg-white border-2 border-gray-400 w-full px-5 py-2 rounded focus:outline-teal-600 ' +
-										(errors.email && 'border-red-500')
-									}
-									type="email"
+								<TextInput
+									classNames={{ input: 'border-2' }}
+									label="Email"
+									required
 									name="email"
+									type="email"
 									placeholder="Email"
+									size="lg"
 									onChange={handleChange}
 									onBlur={handleBlur}
 									value={values.email}
+									error={errors.email && touched.email}
 								/>
-								<p className="text-left ml-1 mt-1 text-red-500 text-xs">
+								<p className="ml-1 mt-1 text-red-500 text-xs">
 									{errors.email && touched.email && errors.email}
 								</p>
 							</div>
+
 							<div className="mb-4">
-								<input
-									className={
-										'bg-white border-2 border-gray-400 w-full px-5 py-2 rounded focus:outline-teal-600 ' +
-										(errors.password && 'border-red-500')
-									}
-									type="password"
+								<TextInput
+									classNames={{ input: 'border-2' }}
+									label="Password"
+									required
 									name="password"
+									type="password"
 									placeholder="Password"
+									size="lg"
 									onChange={handleChange}
 									onBlur={handleBlur}
 									value={values.password}
+									error={errors.password && touched.password}
 								/>
-								<p className="text-left ml-1 mt-1 text-red-500 text-xs">
+								<p className="ml-1 mt-1 text-red-500 text-xs">
 									{errors.password && touched.password && errors.password}
 								</p>
 							</div>
-
-							<button
-								className="bg-teal-600 text-white font-medium py-2 px-4 my-5 rounded"
-								type="submit"
-								disabled={isSubmitting}
-							>
+							<p className="my-1 text-red-500 text-xs text-center">{fetchError}</p>
+							<Button className="my-5" type="submit" size="lg" loading={isSubmitting}>
 								Login
-							</button>
+							</Button>
 						</form>
 					)}
 				</Formik>

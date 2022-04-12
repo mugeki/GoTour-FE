@@ -25,6 +25,14 @@ export default function CardHome({
 				</div>
 				<div>
 					<AddToWishlistButton isActive={isWishlishted} id={id} className="absolute z-10 m-2" />
+					{/* <ActionIcon
+						size="xl"
+						radius="xl"
+						variant="filled"
+						className="absolute z-10 m-2"
+					>
+						<Bookmark />
+					</ActionIcon> */}
 					<Image
 						src={img_urls}
 						width={focused ? 250 : 220}

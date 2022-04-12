@@ -1,44 +1,69 @@
 import { Icon } from '@iconify/react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
+import { Radio, RadioGroup, TextInput } from '@mantine/core';
+import { useState } from 'react';
 
 export default function SearchEngine({ handleSearchSubmit }) {
+    const [radioValue, setRadioValue] = useState('newest');
     return (
         <Formik
-            initialValues={{ keyword: '', sort: '' }}
+            initialValues={{ keyword: '' }}
             validate={values => {
                 const errors = {};
                 return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
-                handleSearchSubmit(values.keyword, values.sort);
-                // alert(JSON.stringify(values, null, 2));
+                console.log({ ...values, radioValue })
+                handleSearchSubmit(values.keyword, radioValue);
                 setSubmitting(false);
             }}
         >
-            {({ isSubmitting }) => (
-                <Form className="shadow-md p-5 text-sm">
-                    <div className='relative mb-5'>
-                        <Icon icon="ant-design:search-outlined" color="#888888" width={19} height={19} className='absolute top-3 left-3' />
-                        <Field name="keyword" type="text" placeholder="Cari nama tempat" className="w-full border border-slate-400 rounded px-1 py-2 pl-10" />    
-                        <ErrorMessage name="keyword" />
+            {({ 
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+             }) => (
+                <form onSubmit={handleSubmit} className="shadow-md p-5 text-sm bg-white">
+                    <div className="relative mb-5">
+                        <TextInput
+                            size="md"
+                            classNames={{ input: 'border-2' }}
+                            icon={
+                                <Icon
+                                    icon="ant-design:search-outlined"
+                                    width={19}
+                                    height={19}
+                                    className="absolute top-3 left-3"
+                                />
+                            }
+                            type="text"
+                            name="keyword"
+                            placeholder="Cari nama tempat"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.keyword}
+                            error={errors.keyword && touched.keyword}
+                        />
+                        <p className="ml-1 mt-1 text-red-500 text-xs">
+                            {errors.keyword && touched.keyword && errors.keyword}
+                        </p>
                     </div>
-
-                    <p className='font-bold mb-4'>Sort By</p>
-                    <div role="group" aria-labelledby="my-radio-group">
-                        <div>
-                            <label className='ml-3'>
-                                <Field type="radio" name="sort" value="created_at" className='accent-teal-200' />
-                                Newest
-                            </label>
-                        </div>
-                        <div>
-                            <label className='ml-3'>
-                                <Field type="radio" name="sort" value="rating" className='accent-teal-200' />
-                                Highest Rating
-                            </label>
-                        </div>
-                    </div>
-                </Form>
+                    <RadioGroup
+                        label="Sort by"
+                        size="md"
+                        orientation="vertical"
+                        defaultValue="newest"
+                        onChange={setRadioValue}
+                        value={radioValue}
+                    >
+                        <Radio value="newest" label="Newest" />
+                        <Radio value="rating" label="Highest Rating" />
+                    </RadioGroup>
+                </form>
             )}
         </Formik>
     )

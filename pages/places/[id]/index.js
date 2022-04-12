@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
+import 'swiper/css';
 import AddToWishlistButton from '../../../components/elements/addToWishlistButton';
 import Layout from '../../../components/layout';
 import { generateAxiosConfig, isLoggedIn } from "../../../utils/helper";
@@ -35,10 +36,9 @@ export default function Place() {
 					setData(place);
 				}
 			})
-			.catch(err => {
+			.catch((err) => {
 				console.log(err);
-				// alert(JSON.stringify(err.res.data));
-			})
+			});
 	}, [router]);
 	
 	const handleRating = (rating) => {
@@ -81,11 +81,16 @@ export default function Place() {
 								objectFit="cover"
 								className="rounded shadow"
 							/>
+
 							<div className="flex justify-between">
 								{data.img_urls
 									.filter((_, i) => i !== focusedImage)
 									.map((img, j) => (
-										<div key={j} className="cursor-pointer" onClick={() => setFocusedImage(j)}>
+										<div
+											key={j}
+											className="cursor-pointer hover:translate-x-1.5 hover:translate-y-1.5 transition-all"
+											onClick={() => setFocusedImage(j)}
+										>
 											<Image
 												key={j}
 												src={img}

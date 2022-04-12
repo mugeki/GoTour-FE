@@ -15,3 +15,9 @@ body {
 svg.star-svg {
 	display: inline;
 }
+
+.mantine-Button-filled {
+	-webkit-appearance: button;
+	background-color: teal;
+	background-image: none;
+}

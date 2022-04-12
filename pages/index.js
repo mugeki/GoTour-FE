@@ -1,13 +1,13 @@
 import { Icon } from '@iconify/react';
+import { Button } from '@mantine/core';
+import axios from 'axios';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Autoplay, Pagination } from 'swiper';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CardHome from '../components/elements/cardHome';
 import Layout from '../components/layout';
-import axios from 'axios';
-import { useEffect } from 'react';
 import { generateAxiosConfig, isLoggedIn } from "../utils/helper";
 
 export default function Home() {
@@ -40,22 +40,21 @@ export default function Home() {
 				}
 
 			})
-			.catch(err => {
+			.catch((err) => {
 				console.log(err);
-			})
+			});
 	}, []);
 
 	return (
 		<Layout navbarStyle="dark">
-			{ data.length !== 0 &&
-				(
-					<>
+			{data.length !== 0 && (
+				<>
 					<div className="absolute top-0 -z-10 bg-black/70 min-w-full min-h-screen"></div>
 						<div
 							className="absolute top-0 -z-20 min-w-full min-h-screen bg-cover transition-all duration-300"
 							style={{ backgroundImage: `url(${data[focusedItem].img_urls[0]})` }}
 						></div>
-						<main className="flex flex-col-reverse lg:flex-row justify-between items-center self-center lg:py-28 px-10 lg:px-20 xl:px-36 text-white">
+						<main className="flex flex-col-reverse lg:flex-row justify-between items-center self-center lg:pt-28 px-10 lg:px-20 xl:px-36 text-white">
 							<div className="w-full md:w-3/4 lg:w-2/4 md:mr-10 mt-6 lg:mt-0">
 								<h1 className="font-bold text-4xl md:text-6xl mb-3 truncate">
 									{data[focusedItem].name}
@@ -64,10 +63,15 @@ export default function Home() {
 									{data[focusedItem].description}
 								</p>
 								<Link href="/" passHref>
-									<a className="bg-teal-800 flex items-center justify-between py-2 px-4 mt-5 w-28 rounded shadow text-sm">
-										<span>Explore</span>
-										<Icon icon="eva:arrow-right-fill" />
-									</a>
+									<Button
+										className="my-5"
+										type="submit"
+										size="lg"
+										variant="filled"
+										rightIcon={<Icon icon="eva:arrow-right-fill" />}
+									>
+										Explore
+									</Button>
 								</Link>
 							</div>
 							<Swiper

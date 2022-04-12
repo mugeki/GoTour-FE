@@ -23,7 +23,6 @@ export default function Explore() {
                                     wishlist: wishlistedPlaces.some(e => e.id === place.id),
                                 }
                             })
-                            console.log(resWithWishlist)
                             setData(resWithWishlist);
                         })
                         .catch(err => {
@@ -31,12 +30,12 @@ export default function Explore() {
                             alert(JSON.stringify(err.res.data));
                         })
 				} else {
-					setData(res.data.data);
+					setData(res.data.data.data);
 				}
 			})
-			.catch(err => {
+			.catch((err) => {
 				console.log(err);
-			})
+			});
 	}, []);
 
     const handleSearchSubmit = (keywordSubmit, sortBySubmit) => {
@@ -62,7 +61,7 @@ export default function Explore() {
                             alert(JSON.stringify(err.res.data));
                         })
 				} else {
-					setData(res.data.data);
+					setData(res.data.data.data);
 				}
 			})
 			.catch(err => {
@@ -70,8 +69,7 @@ export default function Explore() {
 			})
     }
 
-    const handleLoadMore = () => {        ;
-        // console.log(`${process.env.BE_API_URL}/place?page=${page}&keyword=${keyword}&sort_by=${sortBy}`)
+    const handleLoadMore = () => {
         axios.get(`${process.env.BE_API_URL}/place?page=${data.length/9 + 1}&keyword=${keyword}&sort_by=${sortBy}`)
 			.then(res => {
                 if (isLoggedIn()) {
@@ -96,7 +94,7 @@ export default function Explore() {
 				} else {
 					setData([
                         ...data,
-                        ...res.data.data
+                        ...res.data.data.data
                     ]);
 				}
 			})
@@ -107,7 +105,7 @@ export default function Explore() {
 
     return (
         <Layout>
-            <main className="px-10 py-10">
+            <main className="px-20 py-10">
                 <h1 className="font-bold text-2xl md:text-3xl mb-4">
                     Explore Places
                 </h1>
@@ -117,7 +115,7 @@ export default function Explore() {
                     </div>
                     <div className="lg:w-3/4 ">
                         <div className="flex flex-row flex-wrap justify-center">
-                            {data.map((item, i) => (
+                            {data?.map((item, i) => (
                                 <div key={i} className="w-full sm:w-auto sm:mx-5 mb-10">
                                     <CardExplore                                    
                                         id={item.id}                                    
@@ -137,5 +135,5 @@ export default function Explore() {
                 </div>
             </main>
 		</Layout>
-    )
+	);
 }
