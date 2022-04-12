@@ -15,6 +15,7 @@ export default function CardExplore({
 	location,
 	rating,
 	openEdit,
+	isWishlishted,
 }) {
 	const router = useRouter();
 	const editable = router.pathname.includes('/submitted-places');
@@ -55,7 +56,7 @@ export default function CardExplore({
 					</div>
 				)}
 				<div className="relative">
-					<AddToWishlistButton className="absolute z-10 m-2 right-0" />
+					<AddToWishlistButton isActive={isWishlishted} id={id} className="absolute z-10 m-2 right-0" />
 					<Image
 						src={img_urls}
 						width={245}

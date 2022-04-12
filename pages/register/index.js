@@ -8,6 +8,7 @@ import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import Layout from '../../components/layout';
 import { validateForm } from '../../utils/helper';
+import Head from 'next/head';
 
 export default function Register() {
 	const router = useRouter();
@@ -30,8 +31,37 @@ export default function Register() {
 
 	const img =
 		'https://images.unsplash.com/photo-1593537898540-b8b821014c8e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80';
+
+	const router = useRouter();
+
+	const register = (name, email, password) => {
+		const cookies = new Cookies();
+		
+		axios.post(`${process.env.BE_API_URL}/register`, {
+			name,
+			email,
+			password
+		})
+		.then(resp => {
+			cookies.set("token", resp.data.data.access_token, { path: "/", domain: window.location.hostname });
+			router.push("/");
+		})
+		.catch(err => {
+			console.log(err);
+			alert(err.res.data.meta.message[0]);
+		})
+	}
+
 	return (
 		<Layout>
+			<Head>
+				<title>Register | GoTour</title>
+				<meta
+					name="description"
+					content="Find the perfect destination for your trip"
+				/>
+				<link rel="icon" href="/" />
+			</Head>
 			<div className="grid grid-cols-3">
 				<div>
 					<div

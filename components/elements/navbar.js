@@ -1,31 +1,17 @@
 import { Icon } from '@iconify/react';
+import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
+import { generateAxiosConfig, isLoggedIn } from '../../utils/helper';
 
 export default function Navbar({ mode }) {
-	const router = useRouter();
 	const cookies = new Cookies();
-	const token = cookies.get('token');
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-	useEffect(() => {
-		if (token) {
-			setIsLoggedIn(true);
-		} else {
-			setIsLoggedIn(false);
-		}
-	}, []);
-
-	const handleLogout = () => {
-		cookies.remove('token');
-		router.push('/');
-		setIsLoggedIn(false);
-	};
+	const router = useRouter();
 
 	const textColor =
 		mode === 'light' ? 'text-gray-900' : mode === 'dark' ? 'text-white' : '';
+		
 	const hoverColor =
 		mode === 'light'
 			? 'hover:text-teal-600'
@@ -33,6 +19,18 @@ export default function Navbar({ mode }) {
 			? 'hover:text-teal-500'
 			: '';
 	const shadow = mode === 'light' ? 'shadow' : '';
+
+	const handleLogOut = () => {
+		axios.post(`${process.env.BE_API_URL}/logout`, {}, generateAxiosConfig())
+			.then(res => {
+				cookies.remove("token", { path: "/", domain: window.location.hostname });
+				router.push("/");
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	}
+	
 	return (
 		<header
 			className={
@@ -53,7 +51,19 @@ export default function Navbar({ mode }) {
 				<Link href="/explore" passHref>
 					<a className={'mx-3 ' + hoverColor}>Explore</a>
 				</Link>
-				{!isLoggedIn && (
+				{isLoggedIn() ? 
+					<>
+						<Link href="/wishlist" passHref>
+							<a className={'mx-3 ' + hoverColor}>Wishlist</a>
+						</Link>
+						<Link href="/my-places" passHref>
+							<a className={'mx-3 ' + hoverColor}>My Places</a>
+						</Link>
+						<div onClick={handleLogOut} className="cursor-pointer inline-block">
+							<a className={'mx-3 ' + hoverColor}>Log Out</a>
+						</div>
+					</>
+				:
 					<>
 						<Link href="/register" passHref>
 							<a className={'mx-3 ' + hoverColor}>Register</a>
@@ -62,20 +72,8 @@ export default function Navbar({ mode }) {
 							<a className={'mx-3 ' + hoverColor}>Login</a>
 						</Link>
 					</>
-				)}
-				{isLoggedIn && (
-					<>
-						<Link href="/wishlist" passHref>
-							<a className={'mx-3 ' + hoverColor}>My Wishlist</a>
-						</Link>
-						<Link href="/submitted-places" passHref>
-							<a className={'mx-3 ' + hoverColor}>Submitted Places</a>
-						</Link>
-						<a className={'mx-3 cursor-pointer ' + hoverColor} onClick={handleLogout}>
-							Logout
-						</a>
-					</>
-				)}
+				}
+				
 			</nav>
 		</header>
 	);
