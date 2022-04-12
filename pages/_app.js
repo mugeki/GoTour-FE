@@ -1,7 +1,9 @@
 import { MantineProvider } from '@mantine/core';
+import { parseCookies } from 'nookies';
 import '../styles/globals.css';
+import { redirect } from '../utils/helper';
 
-export default function App({ Component, pageProps }) {
+function App({ Component, pageProps }) {
 	return (
 		<MantineProvider
 			theme={{
@@ -26,3 +28,28 @@ export default function App({ Component, pageProps }) {
 		</MantineProvider>
 	);
 }
+
+App.getInitialProps = async ({ Component, ctx }) => {
+	const { token } = parseCookies(ctx);
+
+	let pageProps = {};
+
+	if (Component.getInitialProps) {
+		pageProps = await Component.getInitialProps(ctx);
+	}
+
+	const isProtectedRoute =
+		ctx.pathname === '/wishlist' || ctx.pathname === '/submitted-places';
+	const isAuthRoute = ctx.pathname === '/login' || ctx.pathname === '/register';
+
+	if (!token && isProtectedRoute) {
+		redirect(ctx, '/login');
+	}
+
+	if (token && isAuthRoute) {
+		redirect(ctx, '/');
+	}
+	return { pageProps };
+};
+
+export default App;

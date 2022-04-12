@@ -8,12 +8,35 @@ import {
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
+import { app } from '../../thirdparties/firebase/firebase';
 import { validateForm } from '../../utils/helper';
 import ImageDropzone from './imageDropzone';
 
 export default function ModalPlace({ title, opened, setOpened, isEdit, data }) {
 	const [files, setFiles] = useState([]);
 	const [fetchError, setFetchError] = useState('');
+	const uploadImage = (files) => {
+		if (app) {
+			// loop through files array
+			for (let i = 0; i < files.length; i++) {}
+
+			const file = e.target.files[0];
+			const storageRef = getStorage();
+			const fileRef = ref(storageRef, file.name);
+			setLoadingUpload(true);
+			imageCompression(file, compressionOption).then((compressedFile) => {
+				uploadBytes(fileRef, compressedFile).then(() => {
+					getDownloadURL(fileRef)
+						.then((url) => {
+							setForm({ ...form, img_link: url });
+						})
+						.then(() => {
+							setLoadingUpload(false);
+						});
+				});
+			});
+		}
+	};
 	const handleSubmit = (data, setSubmitting, setFetchError) => {
 		axios
 			.post(`${process.env.BE_API_URL}/register`, data)

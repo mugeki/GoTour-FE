@@ -7,13 +7,13 @@ import Cookies from 'universal-cookie';
 export default function Navbar({ mode }) {
 	const router = useRouter();
 	const cookies = new Cookies();
+	const token = cookies.get('token');
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	useEffect(() => {
-		if (cookies.get('token')) {
+		if (token) {
 			setIsLoggedIn(true);
 		} else {
-			router.push('/');
 			setIsLoggedIn(false);
 		}
 	}, []);

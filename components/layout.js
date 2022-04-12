@@ -1,7 +1,9 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import Navbar from './elements/navbar';
 
 export default function Layout({ children, navbarStyle = 'light' }) {
+	const router = useRouter();
 	return (
 		<>
 			<Head>
@@ -13,13 +15,12 @@ export default function Layout({ children, navbarStyle = 'light' }) {
 				<link rel="icon" href="/" />
 			</Head>
 			<Navbar mode={navbarStyle} />
-			<div
-				className={
-					'min-h-screen ' + (navbarStyle === 'light' ? 'bg-[#FCFCFC]' : '')
-				}
-			>
-				{children}
-			</div>
+			{router.pathname === '/' && <>{children}</>}
+			{router.pathname !== '/' && (
+				<div className={navbarStyle === 'light' ? 'bg-[#FCFCFC]' : ''}>
+					{children}
+				</div>
+			)}
 		</>
 	);
 }
