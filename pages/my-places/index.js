@@ -53,7 +53,7 @@ export default function MyPlaces() {
 			/>
 			<main className="px-20 py-10">
 				<div className="flex items-center justify-between mb-8">
-					<h1 className="font-bold text-2xl md:text-3xl ">Submitted Places</h1>
+					<h1 className="font-bold text-2xl md:text-3xl ">My Places</h1>
 					<Button
 						variant="outline"
 						rightIcon={<Plus size={15} />}

@@ -18,7 +18,7 @@ export default function CardExplore({
 	isWishlishted,
 }) {
 	const router = useRouter();
-	const editable = router.pathname.includes('/submitted-places');
+	const editable = router.pathname.includes('/my-places');
 	const [isOpen, setIsOpen] = useState(false);
 	return (
 		<>
