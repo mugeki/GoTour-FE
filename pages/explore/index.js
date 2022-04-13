@@ -128,7 +128,7 @@ export default function Explore() {
                                 </div>
                             ))}                        
                         </div>
-                        {(data.length % 9 === 0 && data.length === 0)  && (
+                        {(data.length % 9 === 0 && data.length !== 0)  && (
                             <button onClick={handleLoadMore} className="text-center m-auto block">Load more...</button>
                         )}
                     </div>
