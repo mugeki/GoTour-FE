@@ -17,7 +17,7 @@ export default function Register() {
 			.post(`${process.env.BE_API_URL}/register`, data)
 			.then((res) => {
 				const cookies = new Cookies();
-				cookies.set('token', res.data.data.access_token, { path: '/' });
+				cookies.set('token', res.data.data.access_token, { path: '/', domain: window.location.hostname });
 				router.push('/');
 			})
 			.catch((err) => {
