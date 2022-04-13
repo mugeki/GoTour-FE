@@ -59,7 +59,7 @@ export default function CardExplore({
 						</ActionIcon>
 					</div>
 				)}
-				<div className="relative">
+				<div className="relative w-full h-[160px]">
 					<AddToWishlistButton
 						isActive={isWishlishted}
 						id={id}
@@ -67,10 +67,9 @@ export default function CardExplore({
 					/>
 					<Image
 						src={img_urls}
-						width={245}
-						height={176}
+						layout="fill"
 						objectFit="cover"
-						className="select-none"
+						className="select-none rounded-b"
 					/>
 				</div>
 			</div>

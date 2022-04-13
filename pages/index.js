@@ -8,37 +8,38 @@ import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CardHome from '../components/elements/cardHome';
 import Layout from '../components/layout';
-import { generateAxiosConfig, isLoggedIn } from "../utils/helper";
+import { generateAxiosConfig, isLoggedIn } from '../utils/helper';
 
 export default function Home() {
 	const [focusedItem, setFocusedItem] = useState(0);
 	const [data, setData] = useState([]);
 
 	useEffect(() => {
-		axios.get(`${process.env.BE_API_URL}/place?sort_by=rating`)
-			.then(res => {
+		axios
+			.get(`${process.env.BE_API_URL}/place?sort_by=rating`)
+			.then((res) => {
 				const highlightedPlaces = res.data.data.data.slice(0, 3);
 
 				if (isLoggedIn()) {
-					axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
-						.then(resWishlist => {
+					axios
+						.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
+						.then((resWishlist) => {
 							const wishlistedPlaces = resWishlist.data.data;
 							const resWithWishlist = highlightedPlaces.map((place) => {
 								return {
 									...place,
-									wishlist: wishlistedPlaces.some(e => e.id === place.id),
-								}
-							})
+									wishlist: wishlistedPlaces.some((e) => e.id === place.id),
+								};
+							});
 							setData(resWithWishlist);
 						})
-						.catch(err => {
+						.catch((err) => {
 							console.log(err);
 							// alert(JSON.stringify(err.res.data));
-						})
+						});
 				} else {
 					setData(highlightedPlaces);
 				}
-
 			})
 			.catch((err) => {
 				console.log(err);
@@ -56,13 +57,13 @@ export default function Home() {
 					></div>
 					<main className="flex flex-col-reverse lg:flex-row justify-between items-center self-center lg:pt-28 px-10 lg:px-20 xl:px-36 text-white">
 						<div className="w-full md:w-3/4 lg:w-2/4 md:mr-10 mt-6 lg:mt-0">
-							<h1 className="font-bold text-4xl md:text-6xl mb-3 truncate">
+							<h1 className="font-bold text-3xl md:text-5xl mb-3 truncate">
 								{data[focusedItem].name}
 							</h1>
 							<p className="font-thin text-sm line-clamp-2 sm:line-clamp-5">
 								{data[focusedItem].description}
 							</p>
-							<Link href="/" passHref>
+							<Link href="/explore" passHref>
 								<Button
 									className="my-5"
 									type="submit"
@@ -85,7 +86,7 @@ export default function Home() {
 							}}
 							onSlideChange={(swiper) => setFocusedItem(swiper.activeIndex)}
 							modules={[Autoplay, Pagination]}
-							className="w-full sm:w-2/4"
+							className="w-full sm:w-[470px]"
 						>
 							{data.map((item, i) => (
 								<SwiperSlide key={i} className="self-center">
@@ -103,7 +104,6 @@ export default function Home() {
 					</main>
 				</>
 			)}
-			
 		</Layout>
 	);
 }

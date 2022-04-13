@@ -92,13 +92,13 @@ export default function Place() {
 						<div className="ml-auto">
 							<Image
 								src={data.img_urls[0]}
-								width={650}
+								width={600}
 								height={410}
 								objectFit="cover"
 								className="rounded shadow"
 							/>
 
-							<div className={'flex gap-3 flex-wrap max-w-[650px] justify-center'}>
+							<div className={'flex gap-3 flex-wrap max-w-[600px] justify-center'}>
 								{data.img_urls.map((img, j) => {
 									if (j > 0) {
 										return (
@@ -134,11 +134,13 @@ export default function Place() {
 								/>
 								<span className="text-xs">({data.rated_by_count})</span>
 							</div>
-							<h1 className="text-2xl md:text-5xl font-bold break-all">{data.name}</h1>
-							<p className="text-lg mt-2 md:text-xl md:font-thin break-all">
+							<h1 className="text-2xl lg:text-4xl xl:text-5xl font-bold truncate">
+								{data.name}
+							</h1>
+							<p className="text-md mt-2 xl:text-lg md:font-thin truncate">
 								{data.location}
 							</p>
-							<p className="text-gray-900 mt-5 md:mt-14">{data.description}</p>
+							<p className="text-gray-900 mt-5 text-sm md:mt-14">{data.description}</p>
 						</div>
 					</article>
 				</main>
