@@ -42,7 +42,7 @@ export default function Place() {
 			.catch((err) => {
 				console.log(err);
 			});
-	}, [router]);
+	}, []);
 
 	const handleRating = (rating) => {
 		axios({

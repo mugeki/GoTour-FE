@@ -12,7 +12,7 @@ export default function Layout({ children, navbarStyle = 'light' }) {
 					name="description"
 					content="Find the perfect destination for your trip"
 				/>
-				<link rel="icon" href="/" />
+				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Navbar mode={navbarStyle} />
 			{router.pathname === '/' && <>{children}</>}

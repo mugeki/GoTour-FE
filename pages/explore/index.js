@@ -1,4 +1,4 @@
-import { Loader, Text } from '@mantine/core';
+import { Button, Loader, Text } from '@mantine/core';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import CardExplore from '../../components/elements/cardExplore';
@@ -8,6 +8,7 @@ import { generateAxiosConfig, isLoggedIn } from '../../utils/helper';
 
 export default function Explore() {
 	const [isLoading, setIsLoading] = useState(true);
+	const [isLoadingMore, setIsLoadingMore] = useState(false);
 	const [data, setData] = useState([]);
 	const [keyword, setKeyword] = useState('');
 	const [sortBy, setsortBy] = useState('');
@@ -86,6 +87,7 @@ export default function Explore() {
 	};
 
 	const handleLoadMore = () => {
+		setIsLoadingMore(true);
 		axios
 			.get(
 				`${process.env.BE_API_URL}/place?page=${
@@ -109,6 +111,9 @@ export default function Explore() {
 						.catch((err) => {
 							console.log(err);
 							alert(JSON.stringify(err.res.data));
+						})
+						.finally(() => {
+							setIsLoadingMore(false);
 						});
 				} else {
 					setData([...data, ...res.data.data.data]);
@@ -153,9 +158,14 @@ export default function Explore() {
 						)}
 
 						{data.length % 9 === 0 && data.length !== 0 && (
-							<button onClick={handleLoadMore} className="text-center m-auto block">
-								Load more...
-							</button>
+							<Button
+								variant="filled"
+								onClick={handleLoadMore}
+								loading={isLoadingMore}
+								className="text-center m-auto block"
+							>
+								Load more
+							</Button>
 						)}
 					</div>
 				</div>
