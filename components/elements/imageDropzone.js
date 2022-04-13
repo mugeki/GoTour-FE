@@ -1,6 +1,6 @@
 import { Group, Text, useMantineTheme } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Photo, Upload, X } from 'tabler-icons-react';
 
 function getIconColor(status, accepted, files, theme) {
@@ -25,7 +25,7 @@ function ImageUploadIcon({ status, accepted, files, ...props }) {
 	return <Photo {...props} />;
 }
 
-export const dropzoneChildren = (status, accepted, files, theme) => {
+export const dropzoneChildren = (status, accepted, files, error, theme) => {
 	return (
 		<Group
 			position="center"
@@ -41,11 +41,18 @@ export const dropzoneChildren = (status, accepted, files, theme) => {
 				size={100}
 			/>
 			<div>
-				<Text size="xl" inline className="text-center">
+				<Text
+					size="xl"
+					inline
+					className="text-center"
+					color={error !== '' ? 'red' : ''}
+				>
 					{accepted && files.length > 0
 						? 'Selected files:'
 						: !accepted && files.length > 0
 						? 'Invalid file type'
+						: error !== ''
+						? error
 						: 'Drag images here or click to select files'}
 				</Text>
 				<Text size="sm" color="dimmed" inline mt={7} className="text-center">
@@ -60,16 +67,25 @@ export const dropzoneChildren = (status, accepted, files, theme) => {
 	);
 };
 
-export default function ImageDropzone({ files, setFiles }) {
+export default function ImageDropzone({ files, setFiles, error, setError }) {
 	const theme = useMantineTheme();
-	const [accepted, setAccepted] = useState(false);
+	const [accepted, setAccepted] = useState(true);
 	const handleAccept = (files) => {
 		setAccepted(true);
 		setFiles(files);
+		setError('');
 	};
 	const handleReject = () => {
+		setError('File invalid');
 		setAccepted(false);
 	};
+
+	useEffect(() => {
+		return () => {
+			setAccepted(true);
+			setFiles([]);
+		};
+	}, []);
 
 	return (
 		<Dropzone
@@ -79,7 +95,7 @@ export default function ImageDropzone({ files, setFiles }) {
 			multiple
 			accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
 		>
-			{(status) => dropzoneChildren(status, accepted, files, theme)}
+			{(status) => dropzoneChildren(status, accepted, files, error, theme)}
 		</Dropzone>
 	);
 }

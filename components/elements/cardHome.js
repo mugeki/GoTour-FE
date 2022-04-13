@@ -13,7 +13,7 @@ export default function CardHome({
 }) {
 	return (
 		<Link href={`/places/${id}`} passHref>
-			<div className="m-auto">
+			<div className="m-auto select-none">
 				<h1 className={(focused ? 'text-sm' : 'text-xs') + ' truncate'}>{name}</h1>
 				<div>
 					<Rating
@@ -24,22 +24,17 @@ export default function CardHome({
 					/>
 				</div>
 				<div>
-					<AddToWishlistButton isActive={isWishlishted} id={id} className="absolute z-10 m-2" />
-					{/* <ActionIcon
-						size="xl"
-						radius="xl"
-						variant="filled"
+					<AddToWishlistButton
+						isActive={isWishlishted}
+						id={id}
 						className="absolute z-10 m-2"
-					>
-						<Bookmark />
-					</ActionIcon> */}
+					/>
 					<Image
 						src={img_urls}
 						width={focused ? 250 : 220}
 						height={focused ? 450 : 300}
 						objectFit="cover"
 						className="rounded absolute"
-						quality={100}
 					/>
 				</div>
 			</div>

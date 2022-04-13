@@ -1,5 +1,7 @@
 import { MantineProvider } from '@mantine/core';
 import { parseCookies } from 'nookies';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../styles/globals.css';
 import { redirect } from '../utils/helper';
 
@@ -25,6 +27,7 @@ function App({ Component, pageProps }) {
 			}}
 		>
 			<Component {...pageProps} />
+			<ToastContainer />
 		</MantineProvider>
 	);
 }

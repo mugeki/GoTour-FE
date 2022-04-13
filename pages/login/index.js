@@ -2,12 +2,12 @@ import { Icon } from '@iconify/react';
 import { Button, TextInput } from '@mantine/core';
 import axios from 'axios';
 import { Formik } from 'formik';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { validateForm } from '../../utils/helper';
-import Head from 'next/head';
 
 export default function Login() {
 	const router = useRouter();
@@ -28,24 +28,7 @@ export default function Login() {
 			});
 	};
 	const img =
-		'https://images.unsplash.com/photo-1593537898540-b8b821014c8e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80';	
-
-	// const login = (email, password) => {
-	// 	const cookies = new Cookies();
-		
-	// 	axios.post(`${process.env.BE_API_URL}/login`, {
-	// 		email,
-	// 		password
-	// 	})
-	// 	.then(resp => {
-	// 		cookies.set("token", resp.data.data.access_token, { path: "/", domain: window.location.hostname });
-	// 		router.push("/");
-	// 	})
-	// 	.catch(err => {
-	// 		console.log(err);
-	// 		alert(err.res.data.meta.message);
-	// 	})
-	// }
+		'https://images.unsplash.com/photo-1593537898540-b8b821014c8e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80';
 
 	return (
 		<div className="flex flex-col md:grid md:grid-cols-3">
@@ -67,9 +50,7 @@ export default function Login() {
 				>
 					<div className="flex items-center">
 						<Icon icon="ic:round-mode-of-travel" width={70} color="#fff" />
-						<p className="font-bold text-4xl text-white ml-1 cursor-default">
-							GoTour
-						</p>
+						<p className="font-bold text-4xl text-white ml-1 select-none">GoTour</p>
 					</div>
 				</div>
 			</div>
