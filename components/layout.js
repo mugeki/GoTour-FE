@@ -17,7 +17,11 @@ export default function Layout({ children, navbarStyle = 'light' }) {
 			<Navbar mode={navbarStyle} />
 			{router.pathname === '/' && <>{children}</>}
 			{router.pathname !== '/' && (
-				<div className={navbarStyle === 'light' ? 'bg-[#FCFCFC]' : ''}>
+				<div
+					className={
+						'min-h-screen ' + (navbarStyle === 'light' ? 'bg-[#FCFCFC]' : '')
+					}
+				>
 					{children}
 				</div>
 			)}

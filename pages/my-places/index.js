@@ -1,60 +1,86 @@
-import { Button } from '@mantine/core';
+import { Button, Loader, Text } from '@mantine/core';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { Plus } from 'tabler-icons-react';
 import CardExplore from '../../components/elements/cardExplore';
 import ModalPlace from '../../components/elements/modalPlace';
 import Layout from '../../components/layout';
-import { generateAxiosConfig, isLoggedIn } from "../../utils/helper";
+import { generateAxiosConfig, isLoggedIn } from '../../utils/helper';
 
 export default function MyPlaces() {
+	const [isLoading, setIsLoading] = useState(true);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
 	const [editData, setEditData] = useState({});
 	const [data, setData] = useState([]);
-    useEffect(() => {
-		axios.get(`${process.env.BE_API_URL}/my-places`, generateAxiosConfig())
-			.then(res => {
-                if (isLoggedIn()) {
-                    axios.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
-                        .then(resWishlist => {
-                            const wishlistedPlaces = resWishlist.data.data;
-                            const resWithWishlist = res.data.map((place) => {
-                                return {
-                                    ...place,
-                                    wishlist: wishlistedPlaces.some(e => e.id === place.id),
-                                }
-                            })
-                            setData(resWithWishlist);
-                        })
-                        .catch(err => {
-                            console.log(err);
-                            alert(JSON.stringify(err.res.data));
-                        })
+	useEffect(() => {
+		setIsLoading(true);
+		axios
+			.get(`${process.env.BE_API_URL}/my-places`, generateAxiosConfig())
+			.then((res) => {
+				if (isLoggedIn()) {
+					axios
+						.get(`${process.env.BE_API_URL}/wishlist`, generateAxiosConfig())
+						.then((resWishlist) => {
+							const wishlistedPlaces = resWishlist.data.data;
+							const resWithWishlist = res.data.map((place) => {
+								return {
+									...place,
+									wishlist: wishlistedPlaces.some((e) => e.id === place.id),
+								};
+							});
+							setData(resWithWishlist);
+						})
+						.catch((err) => {
+							console.log(err);
+						})
+						.finally(() => {
+							setIsLoading(false);
+						});
 				} else {
 					setData(res.data);
 				}
 			})
-			.catch(err => {
+			.catch((err) => {
 				console.log(err);
-                // alert(err.res.data.meta.message);
-                alert(JSON.stringify(err.res.data));
-			})
+			});
 	}, []);
 
 	const handleDelete = (id) => {
+		setIsLoading(true);
 		axios
 			.delete(`${process.env.BE_API_URL}/place/${id}`, generateAxiosConfig())
-			.then((res) => {
+			.then(() => {
 				const newData = data.filter((place) => {
 					return place.id != id;
-				})
+				});
 				setData(newData);
+				toast.success('Place deleted!', {
+					position: 'top-center',
+					autoClose: 2000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
 			})
-			.catch((err) => {
-				console.log(err);
+			.catch(() => {
+				toast.error('Something went wrong', {
+					position: 'top-center',
+					autoClose: 2000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
 			})
-	}
+			.finally(() => {
+				setIsLoading(false);
+			});
+	};
 
 	return (
 		<Layout>
@@ -82,26 +108,36 @@ export default function MyPlaces() {
 					</Button>
 				</div>
 
-				<div className="flex flex-row flex-wrap">
-					{data.map((item, i) => (
-						<div key={i} className="w-full sm:w-auto sm:mr-5 mb-10">
-							<CardExplore
-								id={item.id}
-								name={item.name}
-								location={item.location}
-								rating={item.rating}
-								img_urls={item.img_urls[0]}
-								isWishlishted={item.wishlist}
-								handleDelete={handleDelete}
-								openEdit={() => {
-									setIsEdit(true);
-									setEditData({ ...item });
-									setIsOpen(true);
-								}}
-							/>
-						</div>
-					))}
-				</div>
+				{isLoading && <Loader className="m-auto" />}
+				{!isLoading && data.length === 0 && (
+					<Text size="xl" className="text-center">
+						Nothing found.
+					</Text>
+				)}
+
+				{!isLoading && data.length > 0 && (
+					<div className="flex flex-row flex-wrap">
+						{data.map((item, i) => (
+							<div key={i} className="w-full sm:w-auto sm:mr-5 mb-10">
+								<CardExplore
+									id={item.id}
+									name={item.name}
+									location={item.location}
+									rating={item.rating}
+									rated_by_count={item.rated_by_count}
+									img_urls={item.img_urls[0]}
+									isWishlishted={item.wishlist}
+									handleDelete={handleDelete}
+									openEdit={() => {
+										setIsEdit(true);
+										setEditData({ ...item });
+										setIsOpen(true);
+									}}
+								/>
+							</div>
+						))}
+					</div>
+				)}
 			</main>
 		</Layout>
 	);

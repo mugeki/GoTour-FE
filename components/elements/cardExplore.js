@@ -14,6 +14,7 @@ export default function CardExplore({
 	name,
 	location,
 	rating,
+	rated_by_count,
 	openEdit,
 	isWishlishted,
 	handleDelete,
@@ -32,18 +33,19 @@ export default function CardExplore({
 			<div className="rounded shadow-md bg-white">
 				<div className="px-4 py-3">
 					<Link href={`/places/${id}`} passHref>
-						<h1 className="w-[170px] text-base font-bold cursor-pointer hover:text-teal-600 truncate">
+						<h1 className="w-[200px] text-base font-bold cursor-pointer hover:text-teal-600 truncate">
 							{name}
 						</h1>
 					</Link>
-					<h2 className="text-sm font-light">{location}</h2>
-					<div>
+					<h2 className="w-[200px] text-sm font-light truncate">{location}</h2>
+					<div className="flex gap-2 items-center">
 						<Rating
 							initialValue={rating}
 							size={16}
 							readonly
 							className="star-rating"
 						/>
+						<span className="text-xs">({rated_by_count})</span>
 					</div>
 				</div>
 
@@ -58,13 +60,17 @@ export default function CardExplore({
 					</div>
 				)}
 				<div className="relative">
-					<AddToWishlistButton isActive={isWishlishted} id={id} className="absolute z-10 m-2 right-0" />
+					<AddToWishlistButton
+						isActive={isWishlishted}
+						id={id}
+						className="absolute z-10 m-2 right-0"
+					/>
 					<Image
 						src={img_urls}
 						width={245}
 						height={176}
 						objectFit="cover"
-						quality={100}
+						className="select-none"
 					/>
 				</div>
 			</div>

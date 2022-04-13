@@ -5,82 +5,112 @@ import {
 	Textarea,
 	TextInput,
 } from '@mantine/core';
+import axios from 'axios';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { Formik } from 'formik';
 import { useEffect, useState } from 'react';
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { toast } from 'react-toastify';
 import { app } from '../../thirdparties/firebase/firebase';
 import { generateAxiosConfig, validateForm } from '../../utils/helper';
 import ImageDropzone from './imageDropzone';
-import axios from 'axios';
-import { useRouter } from 'next/router';
 
-export default function ModalPlace({ title, opened, setOpened, isEdit, data, placeData, setData }) {
+export default function ModalPlace({
+	title,
+	opened,
+	setOpened,
+	isEdit,
+	data,
+	placeData,
+	setData,
+}) {
 	const [files, setFiles] = useState([]);
-	const [loadingUpload, setLoadingUpload] = useState(false);
-	const [fetchError, setFetchError] = useState('');
-	const router = useRouter();
-	const dataIsEmpty = data  && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype;
+	const [filesError, setFilesError] = useState('');
+	const dataIsEmpty =
+		data &&
+		Object.keys(data).length === 0 &&
+		Object.getPrototypeOf(data) === Object.prototype;
 
-	const handleSubmit = (submittedValues, setSubmitting, setFetchError) => {
-		let imgUrls = []
-
-		setLoadingUpload(true);
-		// Upload image, collect urls to imgUrls
-		Promise.all(files.map((file) => {
-			const storage = getStorage();
-			const storageRef = ref(storage, file.name);
-			return uploadBytes(storageRef, file)
+	const handleSubmit = (submittedValues, setSubmitting) => {
+		if (!isEdit && files.length === 0) {
+			setFilesError('Please upload at least one image');
+			setSubmitting(false);
+			return;
+		}
+		if (app) {
+			setFilesError('');
+			let imgUrls = [];
+			// Upload image, collect urls to imgUrls
+			Promise.all(
+				files.map((file) => {
+					const storage = getStorage();
+					const storageRef = ref(storage, file.name);
+					return uploadBytes(storageRef, file)
+						.then(() => {
+							return getDownloadURL(storageRef);
+						})
+						.then((url) => {
+							imgUrls.push(url);
+						});
+				})
+			)
 				.then(() => {
-					return getDownloadURL(storageRef)
+					submittedValues = { ...submittedValues, img_urls: imgUrls };
 				})
-				.then((url) => {
-					imgUrls.push(url);
-				})
-		}))
-			.then(() => {
-				submittedValues = { ...submittedValues, img_urls: imgUrls }
-			})
-			.then(() => {
-				axios({
-					method: dataIsEmpty ? "post" : "put",
-					url: dataIsEmpty ? `${process.env.BE_API_URL}/place` : `${process.env.BE_API_URL}/place/${data.id}`,
-					headers: generateAxiosConfig().headers,
-					data: {
-						...submittedValues,
-					}
-				})
-					.then((res) => {						
-						if (dataIsEmpty) {
-							// placeData.push(res.data.data);
-							// setData(placeData);
-							// console.log("res", res)
-							// console.log("newData", placeData)
-							// Terpaksa reload gara2 response ga ada id, jadi kalo cardExplore dirender ga bisa masuk page dengan id yang sesuai dengan place
-							router.reload(window.location.pathname)
-						} else {
-							const placeIndex = placeData.findIndex(place => place.id === data.id);
-							// TODO: pengecualian spread buat img_urls
-							placeData[placeIndex] = {
-								...data,
-								...res.data.data
-							}							
-							setData(placeData);
-						}
+				.then(() => {
+					axios({
+						method: dataIsEmpty ? 'post' : 'put',
+						url: dataIsEmpty
+							? `${process.env.BE_API_URL}/place`
+							: `${process.env.BE_API_URL}/place/${data.id}`,
+						headers: generateAxiosConfig().headers,
+						data: {
+							...submittedValues,
+						},
 					})
-					.catch((err) => {
-						// setFetchError(err.response.data.meta.message[0]);
-						console.log("err", JSON.stringify(err))
-					})
-					.finally(() => {
-						setSubmitting(false);
-						setOpened(false);
-					});
-			})
-		
+						.then((res) => {
+							if (dataIsEmpty) {
+								placeData.push(res.data.data);
+								setData(placeData);
+							} else {
+								const placeIndex = placeData.findIndex((place) => place.id === data.id);
+								placeData[placeIndex] = {
+									...data,
+									...res.data.data,
+									img_urls: [...data.img_urls, ...res.data.data.img_urls],
+								};
+								setData(placeData);
+							}
+							toast.success(`Place ${isEdit ? 'updated' : 'added'}!`, {
+								position: 'top-center',
+								autoClose: 2000,
+								hideProgressBar: false,
+								closeOnClick: true,
+								pauseOnHover: true,
+								draggable: true,
+								progress: undefined,
+							});
+							setOpened(false);
+						})
+						.catch(() => {
+							toast.error('Something went wrong', {
+								position: 'top-center',
+								autoClose: 2000,
+								hideProgressBar: false,
+								closeOnClick: true,
+								pauseOnHover: true,
+								draggable: true,
+								progress: undefined,
+							});
+						})
+						.finally(() => {
+							setSubmitting(false);
+						});
+				});
+		}
 	};
 	useEffect(() => {
 		return () => {
-			setFiles([]);
+			setFilesError('');
 		};
 	}, []);
 
@@ -99,15 +129,15 @@ export default function ModalPlace({ title, opened, setOpened, isEdit, data, pla
 		>
 			<Formik
 				initialValues={{
-					name: dataIsEmpty ? '' : data.name ,
-					location: dataIsEmpty ? '' : data.location ,
-					description: dataIsEmpty ? '' : data.description ,
+					name: dataIsEmpty ? '' : data.name,
+					location: dataIsEmpty ? '' : data.location,
+					description: dataIsEmpty ? '' : data.description,
 				}}
 				validate={(values) => {
 					return validateForm(values);
 				}}
 				onSubmit={(values, { setSubmitting }) => {
-					handleSubmit(values, setSubmitting, setFetchError);
+					handleSubmit(values, setSubmitting);
 				}}
 			>
 				{({
@@ -177,10 +207,15 @@ export default function ModalPlace({ title, opened, setOpened, isEdit, data, pla
 								required={isEdit ? false : true}
 								size="md"
 							>
-								<ImageDropzone files={files} setFiles={setFiles} />
+								<ImageDropzone
+									files={files}
+									setFiles={setFiles}
+									isEdit={isEdit}
+									error={filesError}
+									setError={setFilesError}
+								/>
 							</InputWrapper>
 						</div>
-						<p className="my-1 text-red-500 text-xs">{fetchError}</p>
 						<Button className="my-5" type="submit" size="md" loading={isSubmitting}>
 							Submit
 						</Button>
