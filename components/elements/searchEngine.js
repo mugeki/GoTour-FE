@@ -58,6 +58,7 @@ export default function SearchEngine({ handleSearchSubmit }) {
 						defaultValue="newest"
 						onChange={setRadioValue}
 						value={radioValue}
+						classNames={{ radio: 'cursor-pointer' }}
 					>
 						<Radio value="newest" label="Newest" />
 						<Radio value="rating" label="Highest Rating" />
