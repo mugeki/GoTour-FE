@@ -29,22 +29,22 @@ export default function Explore() {
 									wishlist: wishlistedPlaces.some((e) => e.id === place.id),
 								};
 							});
+							console.log(resWithWishlist);
 							setData(resWithWishlist);
+							setIsLoading(false);
 						})
 						.catch((err) => {
 							console.log(err);
 							alert(JSON.stringify(err.res.data));
-						})
-						.finally(() => {
-							setIsLoading(false);
-						});
+						})						
 				} else {
 					setData(res.data.data.data);
+					setIsLoading(false);
 				}
 			})
 			.catch((err) => {
 				console.log(err);
-			});
+			})			
 	}, []);
 
 	const handleSearchSubmit = (keywordSubmit, sortBySubmit) => {
@@ -67,23 +67,21 @@ export default function Explore() {
 									wishlist: wishlistedPlaces.some((e) => e.id === place.id),
 								};
 							});
-							console.log('56: resWithWishlist', resWithWishlist);
 							setData(resWithWishlist);
+							setIsLoading(false);
 						})
 						.catch((err) => {
 							console.log(err);
 							alert(JSON.stringify(err.res.data));
-						})
-						.finally(() => {
-							setIsLoading(false);
-						});
+						})						
 				} else {
 					setData(res.data.data.data);
+					setIsLoading(false);
 				}
 			})
 			.catch((err) => {
 				console.log('err', err);
-			});
+			})			
 	};
 
 	const handleLoadMore = () => {
@@ -107,21 +105,20 @@ export default function Explore() {
 								};
 							});
 							setData([...data, ...resWithWishlist]);
+							setIsLoadingMore(false);
 						})
 						.catch((err) => {
 							console.log(err);
 							alert(JSON.stringify(err.res.data));
-						})
-						.finally(() => {
-							setIsLoadingMore(false);
-						});
+						})						
 				} else {
 					setData([...data, ...res.data.data.data]);
+					setIsLoadingMore(false);
 				}
 			})
 			.catch((err) => {
 				console.log('err', err);
-			});
+			})			
 	};
 
 	return (
