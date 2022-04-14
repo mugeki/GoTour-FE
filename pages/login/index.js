@@ -48,10 +48,12 @@ export default function Login() {
 						backgroundSize: 'cover',
 					}}
 				>
-					<div className="flex items-center">
-						<Icon icon="ic:round-mode-of-travel" width={70} color="#fff" />
-						<p className="font-bold text-4xl text-white ml-1 select-none">GoTour</p>
-					</div>
+					<Link href="/" passHref>
+						<div className="flex items-center cursor-pointer">
+							<Icon icon="ic:round-mode-of-travel" width={70} color="#fff" />
+							<p className="font-bold text-4xl text-white ml-1 select-none">GoTour</p>
+						</div>
+					</Link>
 				</div>
 			</div>
 			<div className="text-center mt-48 md:mt-auto m-auto md:col-span-2 w-3/4 md:w-1/2">

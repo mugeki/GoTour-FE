@@ -48,11 +48,13 @@ export default function Register() {
 						background: `linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${img})`,
 						backgroundSize: 'cover',
 					}}
-				>
-					<div className="flex items-center">
-						<Icon icon="ic:round-mode-of-travel" width={70} color="#fff" />
-						<p className="font-bold text-4xl text-white ml-1 select-none">GoTour</p>
-					</div>
+				>					
+					<Link href="/" passHref>
+						<div className="flex items-center cursor-pointer">
+							<Icon icon="ic:round-mode-of-travel" width={70} color="#fff" />
+							<p className="font-bold text-4xl text-white ml-1 select-none">GoTour</p>
+						</div>
+					</Link>
 				</div>
 			</div>
 			<div className="text-center m-auto col-span-2 w-1/2">
