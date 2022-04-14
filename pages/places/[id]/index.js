@@ -13,6 +13,7 @@ import Head from 'next/head';
 export default function Place() {
 	const [data, setData] = useState();
 	const [bgImage, setBgImage] = useState();
+	const [highlightedImageIndex, setHighlightedImageIndex] = useState(0);
 	const router = useRouter();
 	const { id } = router.query;
 
@@ -38,7 +39,7 @@ export default function Place() {
 						});
 				} else {
 					setData(place);
-				}
+				}				
 			})
 			.catch((err) => {
 				console.log(err);
@@ -75,9 +76,7 @@ export default function Place() {
 	};
 
 	const handleChangeImage = (index) => {
-		const imgData = [...data.img_urls];
-		[imgData[0], imgData[index]] = [imgData[index], imgData[0]];
-		setData({ ...data, img_urls: imgData });
+		setHighlightedImageIndex(index);
 	};
 
 	return (
@@ -95,7 +94,7 @@ export default function Place() {
 					<article className="grid md:grid-cols-2 px-8 py-5 md:px-20 md:py-12">
 						<div className="ml-auto">
 							<Image
-								src={data.img_urls[0]}
+								src={data.img_urls[highlightedImageIndex]}
 								width={600}
 								height={410}
 								objectFit="cover"
@@ -104,24 +103,21 @@ export default function Place() {
 
 							<div className={'flex gap-3 flex-wrap max-w-[600px] justify-center'}>
 								{data.img_urls.map((img, j) => {
-									if (j > 0) {
-										return (
-											<div
+									return (
+										<div
+											key={j}
+											className="relative w-[80px] h-[50px] lg:w-[150px] lg:h-[100px] xl:w-[190px] xl:h-[110px] 2xl:w-[200px] 2xl:h-[120px] cursor-pointer hover:translate-x-1.5 hover:translate-y-1.5 transition-all"
+											onClick={() => handleChangeImage(j)}
+										>
+											<Image
 												key={j}
-												className="relative w-[80px] h-[50px] lg:w-[150px] lg:h-[100px] xl:w-[190px] xl:h-[110px] 2xl:w-[200px] 2xl:h-[120px] cursor-pointer hover:translate-x-1.5 hover:translate-y-1.5 transition-all"
-												onClick={() => handleChangeImage(j)}
-											>
-												<Image
-													key={j}
-													src={img}
-													objectFit="cover"
-													className="rounded"
-													layout="fill"
-												/>
-											</div>
-										);
-									}
-									return;
+												src={img}
+												objectFit="cover"
+												className="rounded"
+												layout="fill"
+											/>
+										</div>
+									);
 								})}
 							</div>
 						</div>
