@@ -8,6 +8,7 @@ import 'swiper/css';
 import AddToWishlistButton from '../../../components/elements/addToWishlistButton';
 import Layout from '../../../components/layout';
 import { generateAxiosConfig, isLoggedIn } from '../../../utils/helper';
+import Head from 'next/head';
 
 export default function Place() {
 	const [data, setData] = useState();
@@ -81,8 +82,11 @@ export default function Place() {
 
 	return (
 		<Layout navbarStyle="dark">
-			{data && (
+			{data && (			
 				<main>
+					<Head>
+						<title>{data.name} - GoTour</title>
+					</Head>
 					<div className="absolute top-0 -z-10 bg-black/70 min-w-full h-64 sm:h-[390px]"></div>
 					<div
 						className="absolute top-0 -z-20 min-w-full bg-cover h-64 sm:h-[390px]"

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import CardExplore from '../../components/elements/cardExplore';
 import Layout from '../../components/layout';
 import { generateAxiosConfig } from '../../utils/helper';
+import Head from 'next/head';
 
 export default function Wishlist() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +27,9 @@ export default function Wishlist() {
 
 	return (
 		<Layout>
+			<Head>
+				<title>Explore - GoTour</title>
+			</Head>
 			<main className="px-20 py-10">
 				<h1 className="font-bold text-2xl md:text-3xl mb-8">My Wishlist</h1>
 				{isLoading && <Loader className="m-auto" />}
