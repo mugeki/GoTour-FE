@@ -40,10 +40,12 @@ export default function Navbar({ mode }) {
 				shadow
 			}
 		>
-			<div className="flex items-center">
-				<Icon icon="ic:round-mode-of-travel" width={40} />
-				<p className="font-bold text-2xl ml-1 cursor-default">GoTour</p>
-			</div>
+			<Link href="/" passHref>
+				<div className="flex items-center cursor-pointer">
+					<Icon icon="ic:round-mode-of-travel" width={40} />
+					<p className="font-bold text-2xl ml-1 select-none">GoTour</p>
+				</div>
+			</Link>
 			<nav className="my-4 md:ml-auto md:my-0 text-sm font-thin">
 				<Link href="/" passHref>
 					<a className={'mx-3 ' + hoverColor}>Home</a>
