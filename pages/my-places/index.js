@@ -7,6 +7,7 @@ import CardExplore from '../../components/elements/cardExplore';
 import ModalPlace from '../../components/elements/modalPlace';
 import Layout from '../../components/layout';
 import { generateAxiosConfig, isLoggedIn } from '../../utils/helper';
+import Head from 'next/head';
 
 export default function MyPlaces() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -84,6 +85,9 @@ export default function MyPlaces() {
 
 	return (
 		<Layout>
+			<Head>
+				<title>My Places - GoTour</title>
+			</Head>
 			<ModalPlace
 				opened={isOpen}
 				setOpened={setIsOpen}

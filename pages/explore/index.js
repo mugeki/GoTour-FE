@@ -5,6 +5,7 @@ import CardExplore from '../../components/elements/cardExplore';
 import SearchEngine from '../../components/elements/searchEngine';
 import Layout from '../../components/layout';
 import { generateAxiosConfig, isLoggedIn } from '../../utils/helper';
+import Head from 'next/head';
 
 export default function Explore() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -123,6 +124,9 @@ export default function Explore() {
 
 	return (
 		<Layout>
+			<Head>
+				<title>Explore - GoTour</title>
+			</Head>
 			<main className="px-20 py-10">
 				<h1 className="font-bold text-2xl md:text-3xl mb-4">Explore Places</h1>
 				<div className="flex flex-col lg:flex-row items-start">

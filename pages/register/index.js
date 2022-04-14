@@ -34,12 +34,7 @@ export default function Register() {
 	return (
 		<div className="grid grid-cols-3">
 			<Head>
-				<title>Register | GoTour</title>
-				<meta
-					name="description"
-					content="Find the perfect destination for your trip"
-				/>
-				<link rel="icon" href="/" />
+				<title>Register - GoTour</title>
 			</Head>
 			<div>
 				<div

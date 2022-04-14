@@ -33,12 +33,7 @@ export default function Login() {
 	return (
 		<div className="flex flex-col md:grid md:grid-cols-3">
 			<Head>
-				<title>Login | GoTour</title>
-				<meta
-					name="description"
-					content="Find the perfect destination for your trip"
-				/>
-				<link rel="icon" href="/" />
+				<title>Login - GoTour</title>
 			</Head>
 			<div>
 				<div
