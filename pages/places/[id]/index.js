@@ -102,11 +102,11 @@ export default function Place() {
 							/>
 
 							<div className={'flex gap-3 flex-wrap max-w-[600px] justify-center'}>
-								{data.img_urls.map((img, j) => {
+								{data.img_urls.map((img, j) => {									
 									return (
 										<div
 											key={j}
-											className="relative w-[80px] h-[50px] lg:w-[150px] lg:h-[100px] xl:w-[190px] xl:h-[110px] 2xl:w-[200px] 2xl:h-[120px] cursor-pointer hover:translate-x-1.5 hover:translate-y-1.5 transition-all"
+											className={`${j === highlightedImageIndex ? "border-[#009994] border-[3px]" : ""} rounded relative w-[80px] h-[50px] lg:w-[150px] lg:h-[100px] xl:w-[190px] xl:h-[110px] 2xl:w-[200px] 2xl:h-[120px] cursor-pointer hover:translate-x-1.5 hover:translate-y-1.5 transition-all`}
 											onClick={() => handleChangeImage(j)}
 										>
 											<Image
