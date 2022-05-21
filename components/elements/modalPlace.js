@@ -3,7 +3,7 @@ import {
 	InputWrapper,
 	Modal,
 	Textarea,
-	TextInput,
+	TextInput
 } from '@mantine/core';
 import axios from 'axios';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
@@ -125,6 +125,7 @@ export default function ModalPlace({
 				title: 'text-lg font-medium',
 				body: 'px-2 pt-5',
 			}}
+			size={"50%"}
 			styles={{ close: { backgroundColor: '#fff !important' } }}
 		>
 			<Formik
@@ -196,6 +197,7 @@ export default function ModalPlace({
 								onBlur={handleBlur}
 								value={values.description}
 								invalid={errors.description && touched.description}
+								minRows={8}
 							/>
 							<p className="text-left ml-1 mt-1 text-red-500 text-xs">
 								{errors.description && touched.description && errors.description}
